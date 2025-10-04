@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Web System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { padding: 10px 20px; margin: 5px; }
+        #testImage { max-width: 300px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Cattle vs Buffalo Classification System Test</h1>
+    
+    <div class="test-section">
+        <h2>1. System Status</h2>
+        <div id="systemStatus">Checking...</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Test Image Upload</h2>
+        <input type="file" id="testFile" accept="image/*">
+        <button onclick="testImageUpload()">Test Upload</button>
+        <div id="uploadResult"></div>
+        <img id="testImage" style="display: none;">
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Classification Test</h2>
+        <button onclick="testClassification()">Test Classification</button>
+        <div id="classificationResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Links to Main System</h2>
+        <a href="http://localhost:8000/home.html" target="_blank">Open Home Page</a><br>
+        <a href="http://localhost:8000/upload.html" target="_blank">Open Upload Page</a>
+    </div>
+
+    <script src="breed-database.js"></script>
+    <script src="ml_classifier.js"></script>
+    <script src="script.js"></script>
+    
+    <script>
+        // Test system status
+        function checkSystemStatus() {
+            const statusDiv = document.getElementById('systemStatus');
+            
+            try {
+                // Check if required scripts are loaded
+                if (typeof BREED_DATABASE !== 'undefined') {
+                    statusDiv.innerHTML += '<div class="success">✅ Breed database loaded</div>';
+                } else {
+                    statusDiv.innerHTML += '<div class="error">❌ Breed database not loaded</div>';
+                }
+                
+                if (typeof MLClassifier !== 'undefined') {
+                    statusDiv.innerHTML += '<div class="success">✅ ML Classifier loaded</div>';
+                } else {
+                    statusDiv.innerHTML += '<div class="error">❌ ML Classifier not loaded</div>';
+                }
+                
+                if (typeof advancedClassification !== 'undefined') {
+                    statusDiv.innerHTML += '<div class="success">✅ Rule-based classification loaded</div>';
+                } else {
+                    statusDiv.innerHTML += '<div class="error">❌ Rule-based classification not loaded</div>';
+                }
+                
+                statusDiv.innerHTML += '<div class="info">ℹ️ System ready for testing</div>';
+                
+            } catch (error) {
+                statusDiv.innerHTML += '<div class="error">❌ Error: ' + error.message + '</div>';
+            }
+        }
+        
+        // Test image upload
+        function testImageUpload() {
+            const fileInput = document.getElementById('testFile');
+            const resultDiv = document.getElementById('uploadResult');
+            const imageDiv = document.getElementById('testImage');
+            
+            if (fileInput.files.length === 0) {
+                resultDiv.innerHTML = '<div class="error">Please select an image file</div>';
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                imageDiv.src = e.target.result;
+                imageDiv.style.display = 'block';
+                resultDiv.innerHTML = '<div class="success">✅ Image uploaded successfully</div>';
+            };
+            
+            reader.readAsDataURL(file);
+        }
+        
+        // Test classification
+        async function testClassification() {
+            const resultDiv = document.getElementById('classificationResult');
+            const imageDiv = document.getElementById('testImage');
+            
+            if (!imageDiv.src) {
+                resultDiv.innerHTML = '<div class="error">Please upload an image first</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="info">Testing classification...</div>';
+            
+            try {
+                // Create a temporary image element for testing
+                const testImage = new Image();
+                testImage.onload = async function() {
+                    try {
+                        // Test rule-based classification
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = testImage.naturalWidth;
+                        canvas.height = testImage.naturalHeight;
+                        ctx.drawImage(testImage, 0, 0);
+                        
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const data = imageData.data;
+                        
+                        // Use existing analysis
+                        const features = extractAdvancedFeatures(data, canvas.width, canvas.height);
+                        const classification = advancedClassification(features);
+                        const breedResult = identifyBreed(classification.type, features);
+                        
+                        resultDiv.innerHTML = `
+                            <div class="success">✅ Classification successful!</div>
+                            <div><strong>Type:</strong> ${classification.type}</div>
+                            <div><strong>Confidence:</strong> ${classification.confidence}%</div>
+                            <div><strong>Breed:</strong> ${breedResult.breed}</div>
+                            <div><strong>Breed Confidence:</strong> ${breedResult.breedConfidence}%</div>
+                            <div><strong>Method:</strong> Rule-based Classification</div>
+                        `;
+                        
+                    } catch (error) {
+                        resultDiv.innerHTML = '<div class="error">❌ Classification failed: ' + error.message + '</div>';
+                    }
+                };
+                
+                testImage.src = imageDiv.src;
+                
+            } catch (error) {
+                resultDiv.innerHTML = '<div class="error">❌ Error: ' + error.message + '</div>';
+            }
+        }
+        
+        // Initialize on page load
+        window.onload = function() {
+            checkSystemStatus();
+        };
+    </script>
+</body>
+</html>

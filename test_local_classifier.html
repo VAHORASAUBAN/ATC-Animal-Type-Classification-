@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local ML Classifier Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #4CAF50;
+            background-color: #f9f9f9;
+        }
+        .upload-area.dragover {
+            border-color: #4CAF50;
+            background-color: #e8f5e9;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .preview-section {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .test-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+        .test-button:hover {
+            background-color: #45a049;
+        }
+        .test-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .result {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #4CAF50;
+            margin: 15px 0;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .error {
+            border-left-color: #f44336;
+            background-color: #ffebee;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Local ML Classifier Test</h1>
+        <p>Test the local machine learning classifier without any server dependencies!</p>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📷</div>
+            <h3>Upload an Image</h3>
+            <p>Drop a cattle or buffalo image here, or click to select</p>
+            <input type="file" id="imageInput" accept="image/*">
+        </div>
+        
+        <div class="preview-section" id="previewSection">
+            <h3>Image Preview</h3>
+            <img id="previewImage" class="preview-image" alt="Preview">
+        </div>
+        
+        <div style="text-align: center;">
+            <button class="test-button" id="testButton" onclick="testLocalClassifier()" disabled>
+                <span id="buttonText">🧠 Test Local Classifier</span>
+                <span id="loadingSpinner" class="loading" style="display: none;"></span>
+            </button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <!-- Include the local ML classifier -->
+    <script src="local_ml_classifier.js"></script>
+    
+    <script>
+        let selectedImage = null;
+        
+        // Setup event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('uploadArea');
+            const imageInput = document.getElementById('imageInput');
+            const previewSection = document.getElementById('previewSection');
+            const previewImage = document.getElementById('previewImage');
+            const testButton = document.getElementById('testButton');
+            
+            // Click to select file
+            uploadArea.addEventListener('click', () => imageInput.click());
+            
+            // File input change
+            imageInput.addEventListener('change', handleFileSelect);
+            
+            // Drag and drop
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('dragleave', handleDragLeave);
+            uploadArea.addEventListener('drop', handleDrop);
+            
+            // Test classifier initialization
+            testClassifierAvailability();
+        });
+        
+        function testClassifierAvailability() {
+            const resultsDiv = document.getElementById('results');
+            
+            if (typeof localMLClassifier !== 'undefined') {
+                resultsDiv.innerHTML = '<div class="result">✅ Local ML Classifier loaded successfully!</div>';
+            } else {
+                resultsDiv.innerHTML = '<div class="result error">❌ Local ML Classifier failed to load!</div>';
+            }
+        }
+        
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                loadImage(file);
+            }
+        }
+        
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('dragover');
+        }
+        
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('dragover');
+        }
+        
+        function handleDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('dragover');
+            
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                loadImage(files[0]);
+            }
+        }
+        
+        function loadImage(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file!');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewImage = document.getElementById('previewImage');
+                const previewSection = document.getElementById('previewSection');
+                const testButton = document.getElementById('testButton');
+                
+                previewImage.src = e.target.result;
+                previewSection.style.display = 'block';
+                testButton.disabled = false;
+                
+                // Wait for image to load
+                previewImage.onload = function() {
+                    selectedImage = previewImage;
+                    console.log('Image loaded:', previewImage.naturalWidth + 'x' + previewImage.naturalHeight);
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        async function testLocalClassifier() {
+            if (!selectedImage) {
+                alert('Please select an image first!');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('results');
+            const buttonText = document.getElementById('buttonText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const testButton = document.getElementById('testButton');
+            
+            // Show loading state
+            testButton.disabled = true;
+            buttonText.style.display = 'none';
+            loadingSpinner.style.display = 'inline-block';
+            
+            resultsDiv.innerHTML = '<div class="result">🔍 Analyzing image with local ML classifier...</div>';
+            
+            try {
+                console.log('🧠 Starting local ML classification...');
+                const startTime = Date.now();
+                
+                // Test the local classifier
+                const result = await localMLClassifier.analyzeImage(selectedImage);
+                
+                const analysisTime = Date.now() - startTime;
+                
+                if (result) {
+                    const formattedResult = `🎉 Local ML Classification Complete!
+                    
+📊 Primary Results:
+• Animal Type: ${result.prediction}
+• Confidence: ${Math.round(result.confidence * 100)}%
+• Predicted Breed: ${result.breed}
+• Breed Confidence: ${Math.round(result.breedConfidence * 100)}%
+
+📈 Probability Scores:
+• Cattle: ${Math.round(result.probabilities.Cattle * 100)}%
+• Buffalo: ${Math.round(result.probabilities.Buffalo * 100)}%
+
+⚙️ Analysis Details:
+• Method: ${result.analysis.method}
+• Model Type: ${result.analysis.modelType}
+• Analysis Time: ${analysisTime}ms
+
+🔧 Feature Analysis:
+• Brightness: ${result.analysis.features.brightness.toFixed(1)}
+• Contrast: ${result.analysis.features.contrast.toFixed(1)}
+• Edge Density: ${result.analysis.features.edgeDensity.toFixed(3)}
+• Dominant Color: ${result.analysis.features.dominantColor}
+• Texture Complexity: ${result.analysis.features.textureComplexity}
+• HSV Profile: Sat=${result.analysis.features.hsvDistribution.saturation}, Val=${result.analysis.features.hsvDistribution.value}
+
+🧠 Detailed Classification Analysis:
+• Color Analysis - Cattle: ${(result.analysis.detailedAnalysis.colorAnalysis.cattleScore * 100).toFixed(1)}%, Buffalo: ${(result.analysis.detailedAnalysis.colorAnalysis.buffaloScore * 100).toFixed(1)}%
+• Brightness Analysis - Cattle: ${(result.analysis.detailedAnalysis.brightnessAnalysis.cattleScore * 100).toFixed(1)}%, Buffalo: ${(result.analysis.detailedAnalysis.brightnessAnalysis.buffaloScore * 100).toFixed(1)}%
+• Texture Analysis - Cattle: ${(result.analysis.detailedAnalysis.textureAnalysis.cattleScore * 100).toFixed(1)}%, Buffalo: ${(result.analysis.detailedAnalysis.textureAnalysis.buffaloScore * 100).toFixed(1)}%
+• Edge Analysis - Cattle: ${(result.analysis.detailedAnalysis.edgeAnalysis.cattleScore * 100).toFixed(1)}%, Buffalo: ${(result.analysis.detailedAnalysis.edgeAnalysis.buffaloScore * 100).toFixed(1)}%
+• HSV Analysis - Cattle: ${(result.analysis.detailedAnalysis.hsvAnalysis.cattleScore * 100).toFixed(1)}%, Buffalo: ${(result.analysis.detailedAnalysis.hsvAnalysis.buffaloScore * 100).toFixed(1)}%
+• Color Moments - Cattle: ${(result.analysis.detailedAnalysis.momentsAnalysis.cattleScore * 100).toFixed(1)}%, Buffalo: ${(result.analysis.detailedAnalysis.momentsAnalysis.buffaloScore * 100).toFixed(1)}%
+
+✅ No server connection required!
+✅ Completely client-side processing!
+✅ Based on your trained Indian Bovine dataset!
+✅ Advanced computer vision feature analysis!`;
+                    
+                    resultsDiv.innerHTML = '<div class="result">' + formattedResult + '</div>';
+                    console.log('✅ Local ML classification successful:', result);
+                } else {
+                    throw new Error('Local classifier returned null result');
+                }
+                
+            } catch (error) {
+                console.error('❌ Local ML classification failed:', error);
+                resultsDiv.innerHTML = '<div class="result error">❌ Local ML Classification Failed!\\n\\nError: ' + error.message + '</div>';
+            } finally {
+                // Reset button state
+                testButton.disabled = false;
+                buttonText.style.display = 'inline';
+                loadingSpinner.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
