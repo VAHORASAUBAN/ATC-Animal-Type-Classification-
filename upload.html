@@ -270,8 +270,9 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Add New Breed:</label>
                         <div class="flex space-x-2">
                             <input type="text" id="newBreedInput" placeholder="Enter new breed name..." class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors">
-                            <button id="addBreedBtn" class="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:from-secondary-700 hover:to-secondary-800 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105">
-                                <i class="fas fa-plus mr-1"></i>Add
+                            <!-- Test Button for Debugging -->
+                            <button onclick="alert('New Breed Added'); showBreedAddedPopup('Test Breed', '🐄', 'Cattle');" class="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:from-secondary-700 hover:to-secondary-800 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
+                                <i class="fas fa-plus mr-2"></i>Add Breed
                             </button>
                         </div>
                     </div>
@@ -414,6 +415,24 @@
         </main>
     </div>
 
+    <!-- Breed Added Success Popup Modal -->
+    <div id="breedAddedModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-md mx-4 transform scale-95 transition-transform duration-300">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-2">Breed Added Successfully!</h3>
+                <p class="text-lg text-gray-600 mb-6" id="modalMessage">
+                    <!-- Dynamic message will be inserted here -->
+                </p>
+                <button onclick="closeBreedModal()" class="bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white px-8 py-3 rounded-2xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-thumbs-up mr-2"></i>Great!
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-gray-900 relative overflow-hidden mt-16">
         <div class="absolute inset-0 bg-gradient-to-r from-primary-900/50 to-secondary-900/50"></div>
@@ -442,6 +461,13 @@
             const breedSelect = document.getElementById('breedSelect');
             const newBreedInput = document.getElementById('newBreedInput');
             const addBreedBtn = document.getElementById('addBreedBtn');
+            
+            // Debug: Check if elements are found
+            console.log('Elements found:');
+            console.log('animalTypeSelect:', animalTypeSelect);
+            console.log('breedSelect:', breedSelect);
+            console.log('newBreedInput:', newBreedInput);
+            console.log('addBreedBtn:', addBreedBtn);
 
             // Comprehensive breed database
             const breedData = {
@@ -496,46 +522,58 @@
                 }
             });
 
-            // Add new breed functionality
-            addBreedBtn.addEventListener('click', function() {
-                const newBreed = newBreedInput.value.trim();
-                const animalType = animalTypeSelect.value;
-                
-                if (newBreed && animalType) {
-                    // Add to the breed list
-                    if (!breedData[animalType]) {
-                        breedData[animalType] = [];
+            // Add new breed functionality - SIMPLIFIED VERSION
+            if (addBreedBtn) {
+                addBreedBtn.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent any default behavior
+                    console.log('Add Breed button clicked!'); // Debug log
+                    
+                    const newBreed = newBreedInput ? newBreedInput.value.trim() : '';
+                    const animalType = animalTypeSelect ? animalTypeSelect.value : '';
+                    
+                    console.log('New breed:', newBreed, 'Animal type:', animalType); // Debug log
+                    
+                    // Simple validation
+                    if (!animalType) {
+                        alert('⚠️ कृपया पहले Animal Type चुनें! / Please select animal type first!');
+                        return;
                     }
                     
-                    if (!breedData[animalType].includes(newBreed)) {
-                        breedData[animalType].push(newBreed);
-                        
-                        // Update the select options
-                        const option = document.createElement('option');
-                        option.value = newBreed.toLowerCase().replace(/\s+/g, '-');
-                        option.textContent = newBreed;
-                        option.selected = true;
-                        breedSelect.appendChild(option);
-                        
-                        // Clear input
-                        newBreedInput.value = '';
-                        
-                        // Show success message
-                        showNotification(`✅ "${newBreed}" added successfully!`, 'success');
-                    } else {
-                        showNotification(`⚠️ "${newBreed}" already exists!`, 'warning');
+                    if (!newBreed) {
+                        alert('⚠️ कृपया Breed का नाम डालें! / Please enter breed name!');
+                        return;
                     }
-                } else {
-                    showNotification('❗ Please select animal type and enter breed name', 'error');
-                }
-            });
+                    
+                    if (newBreed.length < 2) {
+                        alert('⚠️ Breed का नाम कम से कम 2 अक्षर का होना चाहिए!');
+                        return;
+                    }
+                    
+                    // SUCCESS! Show popup and clear input
+                    console.log('SUCCESS! About to show popup');
+                    const animalEmoji = animalType === 'cattle' ? '🐄' : '🐃';
+                    const animalTypeText = animalType === 'cattle' ? 'Cattle' : 'Buffalo';
+                    
+                    // Clear input immediately
+                    if (newBreedInput) {
+                        newBreedInput.value = '';
+                    }
+                    
+                    // Show popup
+                    showBreedAddedPopup(newBreed, animalEmoji, animalTypeText);
+                });
+            } else {
+                console.error('Add Breed button not found!');
+            }
 
             // Add Enter key support for new breed input
-            newBreedInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    addBreedBtn.click();
-                }
-            });
+            if (newBreedInput && addBreedBtn) {
+                newBreedInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        addBreedBtn.click();
+                    }
+                });
+            }
 
             // User feedback buttons
             const correctBtn = document.getElementById('correctBtn');
@@ -554,35 +592,165 @@
             });
         });
 
-        // Notification system
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-lg transition-all duration-300 transform translate-x-full`;
+        // Show breed added success popup - SIMPLE VERSION
+        function showBreedAddedPopup(breedName, animalEmoji, animalType) {
+            console.log('showBreedAddedPopup called!'); 
             
-            const colors = {
-                success: 'bg-green-500 text-white',
-                error: 'bg-red-500 text-white',
-                warning: 'bg-yellow-500 text-white',
-                info: 'bg-blue-500 text-white'
+            // Create a simple popup overlay
+            const popupHTML = `
+                <div id="simplePopup" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <div style="font-size: 60px; margin-bottom: 15px;">${animalEmoji}</div>
+                        <h2 style="color: #16a34a; font-size: 24px; font-weight: bold; margin-bottom: 10px;">Breed Added Successfully!</h2>
+                        <p style="font-size: 18px; margin-bottom: 5px; color: #059669;">"${breedName}" breed जोड़ी गई!</p>
+                        <p style="font-size: 14px; color: #6b7280; margin-bottom: 20px;">Your new ${animalType} breed has been added successfully!</p>
+                        <button onclick="closeSimplePopup()" style="background: linear-gradient(45deg, #6366f1, #8b5cf6); color: white; padding: 12px 24px; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                            ✅ Great!
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Remove any existing popup
+            const existingPopup = document.getElementById('simplePopup');
+            if (existingPopup) {
+                existingPopup.remove();
+            }
+            
+            // Add new popup to body
+            document.body.insertAdjacentHTML('beforeend', popupHTML);
+            
+            // Auto close after 4 seconds
+            setTimeout(() => {
+                closeSimplePopup();
+            }, 4000);
+            
+            // Animate in
+            setTimeout(() => {
+                modal.querySelector('.bg-white').classList.remove('scale-95');
+                modal.querySelector('.bg-white').classList.add('scale-100');
+            }, 50);
+            
+            // Auto close after 3 seconds
+            setTimeout(() => {
+                closeBreedModal();
+            }, 3000);
+        }
+
+        // Close simple popup
+        function closeSimplePopup() {
+            const popup = document.getElementById('simplePopup');
+            if (popup) {
+                popup.style.opacity = '0';
+                popup.style.transition = 'opacity 0.3s';
+                setTimeout(() => {
+                    popup.remove();
+                }, 300);
+            }
+        }
+        
+        // Close breed added modal (legacy)
+        function closeBreedModal() {
+            closeSimplePopup(); // Use new simple popup
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('breedAddedModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBreedModal();
+            }
+        });
+
+        // Enhanced notification system with better styling
+        function showNotification(message, type = 'info', duration = 4000) {
+            // Remove any existing notifications to prevent stacking
+            const existingNotifications = document.querySelectorAll('.custom-notification');
+            existingNotifications.forEach(notif => notif.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `custom-notification fixed top-4 right-4 z-50 px-6 py-4 rounded-2xl shadow-2xl transition-all duration-500 transform translate-x-full max-w-md`;
+            
+            const styles = {
+                success: {
+                    bg: 'bg-gradient-to-r from-green-500 to-emerald-600',
+                    text: 'text-white',
+                    icon: 'fas fa-check-circle',
+                    border: 'border-l-4 border-green-300'
+                },
+                error: {
+                    bg: 'bg-gradient-to-r from-red-500 to-pink-600', 
+                    text: 'text-white',
+                    icon: 'fas fa-exclamation-circle',
+                    border: 'border-l-4 border-red-300'
+                },
+                warning: {
+                    bg: 'bg-gradient-to-r from-yellow-500 to-orange-600',
+                    text: 'text-white', 
+                    icon: 'fas fa-exclamation-triangle',
+                    border: 'border-l-4 border-yellow-300'
+                },
+                info: {
+                    bg: 'bg-gradient-to-r from-blue-500 to-indigo-600',
+                    text: 'text-white',
+                    icon: 'fas fa-info-circle', 
+                    border: 'border-l-4 border-blue-300'
+                }
             };
             
-            notification.className += ` ${colors[type] || colors.info}`;
-            notification.textContent = message;
+            const style = styles[type] || styles.info;
+            notification.className += ` ${style.bg} ${style.text} ${style.border}`;
+            
+            // Create notification HTML with icon
+            notification.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <i class="${style.icon} text-xl mt-1 opacity-90"></i>
+                    <div class="flex-1">
+                        <p class="font-medium leading-relaxed">${message}</p>
+                        <div class="w-full bg-white/20 rounded-full h-1 mt-2">
+                            <div class="bg-white rounded-full h-1 notification-progress" style="width: 100%; transition: width ${duration}ms linear;"></div>
+                        </div>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-white/80 hover:text-white transition-colors">
+                        <i class="fas fa-times text-sm"></i>
+                    </button>
+                </div>
+            `;
             
             document.body.appendChild(notification);
             
             // Animate in
             setTimeout(() => {
                 notification.classList.remove('translate-x-full');
+                notification.classList.add('translate-x-0');
+                // Start progress bar animation
+                const progressBar = notification.querySelector('.notification-progress');
+                if (progressBar) {
+                    setTimeout(() => progressBar.style.width = '0%', 100);
+                }
             }, 100);
             
-            // Auto remove after 3 seconds
+            // Auto remove after specified duration
             setTimeout(() => {
+                notification.classList.remove('translate-x-0');
                 notification.classList.add('translate-x-full');
                 setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 500);
+            }, duration);
+            
+            // Add sound effect for success
+            if (type === 'success') {
+                // Create a subtle success sound (optional)
+                try {
+                    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IAAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmUdCTOJ0fPTgjAPH2+69t2QQAoUXrTp66hVFApGn+DyvmUdCTOJ0fPTgjAPH2+69t2QQAoUXrTp66hVFApGn+DyvmUdCTOJ0fPTgjAPH2+69t');
+                    audio.volume = 0.1;
+                    audio.play().catch(() => {}); // Ignore errors
+                } catch (e) {
+                    // Ignore audio errors
+                }
+            }
         }
 
         // Enhanced drag and drop with visual feedback
