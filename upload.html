@@ -33,12 +33,32 @@
                         <div class="upload-icon">⚡</div>
                         <h3>Upload Image</h3>
                         <p>Drag & drop an image here or click to browse</p>
-                        <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" hidden>
+                        <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" capture="environment" hidden>
                         <button class="browse-btn" onclick="document.getElementById('fileInput').click()">
                             Browse Files
                         </button>
+                        <button class="browse-btn" id="openCameraBtn" style="margin-left: 10px; background-color: #ff6b35;" onclick="event.stopPropagation();">
+                            📸 Open Camera
+                        </button>
                     </div>
                 </div>
+            </div>
+
+            <!-- Camera Section -->
+            <div class="camera-section" id="cameraSection" style="display: none;">
+                <h3>Camera</h3>
+                <div class="camera-container">
+                    <video id="cameraVideo" autoplay playsinline style="width: 100%; max-width: 500px; border-radius: 10px; background: #000;"></video>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button class="browse-btn" id="captureBtn">
+                        📷 Capture Photo
+                    </button>
+                    <button class="browse-btn" id="closeCameraBtn" style="margin-left: 10px; background-color: #dc3545;">
+                        ✖ Close Camera
+                    </button>
+                </div>
+                <canvas id="cameraCanvas" style="display: none;"></canvas>
             </div>
 
             <div class="preview-section" id="previewSection" style="display: none;">

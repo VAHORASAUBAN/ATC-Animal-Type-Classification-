@@ -157,6 +157,87 @@ function setupEventListeners() {
     uploadArea.addEventListener('drop', handleDrop);
     uploadArea.addEventListener('click', () => fileInput.click());
     classifyBtn.addEventListener('click', classifyImage);
+    
+    // Camera functionality
+    setupCameraControls();
+}
+
+// Camera functionality
+let cameraStream = null;
+
+function setupCameraControls() {
+    const openCameraBtn = document.getElementById('openCameraBtn');
+    const cameraSection = document.getElementById('cameraSection');
+    const cameraVideo = document.getElementById('cameraVideo');
+    const captureBtn = document.getElementById('captureBtn');
+    const closeCameraBtn = document.getElementById('closeCameraBtn');
+    const cameraCanvas = document.getElementById('cameraCanvas');
+
+    if (!openCameraBtn) return; // Exit if elements don't exist
+
+    openCameraBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        try {
+            // Request camera access (prefer rear camera for mobile)
+            cameraStream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: 'environment' }, 
+                audio: false 
+            });
+            cameraVideo.srcObject = cameraStream;
+            cameraSection.style.display = 'block';
+            cameraSection.scrollIntoView({ behavior: 'smooth' });
+            showStatusMessage('Camera opened! Position the animal and click capture.', 'success');
+        } catch (err) {
+            console.error('Camera error:', err);
+            showStatusMessage('Unable to access camera: ' + err.message, 'error');
+        }
+    });
+
+    captureBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (!cameraStream) return;
+        
+        const track = cameraStream.getVideoTracks()[0];
+        const settings = track.getSettings();
+        const width = settings.width || cameraVideo.videoWidth || 640;
+        const height = settings.height || cameraVideo.videoHeight || 480;
+
+        cameraCanvas.width = width;
+        cameraCanvas.height = height;
+        const ctx = cameraCanvas.getContext('2d');
+        ctx.drawImage(cameraVideo, 0, 0, width, height);
+
+        // Convert canvas to blob and create file
+        cameraCanvas.toBlob(function(blob) {
+            const file = new File([blob], 'camera_capture.png', { type: 'image/png' });
+            handleFile(file);
+            
+            // Close camera after capture
+            stopCamera();
+            cameraSection.style.display = 'none';
+            showStatusMessage('Photo captured! Image ready for analysis.', 'success');
+        }, 'image/png');
+    });
+
+    closeCameraBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        stopCamera();
+        cameraSection.style.display = 'none';
+        showStatusMessage('Camera closed.', 'info');
+    });
+}
+
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
 }
 
 function handleDragOver(e) {
