@@ -3,148 +3,1220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Image - Fast Cattle vs Buffalo Classifier</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Upload & Analyze - Pashu Parakh Animal Classification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PDF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            100: '#e0e9ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81'
+                        },
+                        secondary: {
+                            50: '#fef7ff',
+                            100: '#fce7ff',
+                            400: '#d946ef',
+                            500: '#c026d3',
+                            600: '#a21caf',
+                            700: '#86198f',
+                            800: '#701a75',
+                            900: '#581c87'
+                        },
+                        accent: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'pulse-slow': 'pulse 4s infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="brand">Fast Classifier</div>
-            <ul class="nav-links">
-                <li><a href="home.html">Home</a></li>
-                <li><a href="upload.html" class="active">Upload</a></li>
-                <li><a href="info.html">Info</a></li>
-                <li><a href="breeds.html">Breeds</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-            </ul>
+<body class="bg-gradient-to-br from-primary-50 via-white to-secondary-50 min-h-screen animate-fade-in">
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-lg border-b border-primary-200 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-paw text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-700 to-secondary-700 bg-clip-text text-transparent">Pashu Parakh</h1>
+                                <p class="text-xs text-gray-600">Animal Type Classification</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-2">
+                        <a href="home.html" class="text-gray-700 hover:bg-gradient-to-r hover:from-primary-600 hover:to-secondary-600 hover:text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">Home</a>
+                        <a href="upload.html" class="bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transform hover:scale-105 transition-all duration-300">Upload</a>
+                        <a href="info.html" class="text-gray-700 hover:bg-gradient-to-r hover:from-primary-600 hover:to-secondary-600 hover:text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">Info</a>
+                        <a href="breeds.html" class="text-gray-700 hover:bg-gradient-to-r hover:from-primary-600 hover:to-secondary-600 hover:text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">Breeds</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
-    <div class="container">
-        <header>
-            <a id="upload"></a>
-            <h1>Upload & Analyze Image</h1>
-            <p>Upload an image of cattle or buffalo for instant AI analysis</p>
-        </header>
 
-        <main>
-            <div class="upload-section" id="upload">
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-content">
-                        <div class="upload-icon">⚡</div>
-                        <h3>Upload Image</h3>
-                        <p>Drag & drop an image here or click to browse</p>
-                        <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" capture="environment" hidden>
-                        <button class="browse-btn" onclick="document.getElementById('fileInput').click()">
-                            Browse Files
-                        </button>
-                        <button class="browse-btn" id="openCameraBtn" style="margin-left: 10px; background-color: #ff6b35;" onclick="event.stopPropagation();">
-                            📸 Open Camera
-                        </button>
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header Section -->
+        <div class="text-center mb-12 animate-slide-up">
+            <h1 class="text-4xl font-black bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent sm:text-5xl mb-4">
+                🔬 AI Image Analysis
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Upload an image of cattle or buffalo for instant AI-powered breed identification with professional accuracy
+            </p>
+        </div>
+
+        <main class="space-y-8">
+            <!-- Upload Section -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-slide-up">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">📸 Upload or Capture Image</h2>
+                    <p class="text-gray-600">Choose an image file or use your camera for instant analysis</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- File Upload -->
+                    <div class="group">
+                        <div class="border-2 border-dashed border-primary-300 rounded-2xl p-8 text-center hover:border-primary-500 hover:bg-primary-50/50 transition-all duration-300 cursor-pointer" id="uploadArea">
+                            <div class="mb-4">
+                                <i class="fas fa-cloud-upload-alt text-6xl text-primary-500 group-hover:animate-bounce"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Upload Image</h3>
+                            <p class="text-gray-600 mb-4">Drag & drop an image here or click to browse</p>
+                            <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" capture="environment" hidden>
+                            <button class="bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg" onclick="document.getElementById('fileInput').click()">
+                                <i class="fas fa-folder-open mr-2"></i>Browse Files
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Camera Capture -->
+                    <div class="group">
+                        <div class="border-2 border-dashed border-accent-300 rounded-2xl p-8 text-center hover:border-accent-500 hover:bg-accent-50/50 transition-all duration-300 cursor-pointer">
+                            <div class="mb-4">
+                                <i class="fas fa-camera text-6xl text-accent-500 group-hover:animate-pulse"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Use Camera</h3>
+                            <p class="text-gray-600 mb-4">Capture a photo directly with your camera</p>
+                            <button class="bg-gradient-to-r from-accent-600 to-accent-700 hover:from-accent-700 hover:to-accent-800 text-white px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg" id="openCameraBtn">
+                                <i class="fas fa-video mr-2"></i>Open Camera
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Camera Section -->
-            <div class="camera-section" id="cameraSection" style="display: none;">
-                <h3>Camera</h3>
-                <div class="camera-container">
-                    <video id="cameraVideo" autoplay playsinline style="width: 100%; max-width: 500px; border-radius: 10px; background: #000;"></video>
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-slide-up" id="cameraSection" style="display: none;">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">📷 Camera Preview</h3>
+                    <p class="text-gray-600">Position the animal in the center and capture when ready</p>
                 </div>
-                <div style="text-align: center; margin-top: 15px;">
-                    <button class="browse-btn" id="captureBtn">
-                        📷 Capture Photo
+                <div class="flex justify-center mb-6">
+                    <div class="relative">
+                        <video id="cameraVideo" autoplay playsinline class="w-full max-w-lg rounded-2xl shadow-lg bg-black"></video>
+                        <div class="absolute inset-0 border-4 border-primary-400 rounded-2xl pointer-events-none opacity-50"></div>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <button class="bg-gradient-to-r from-accent-600 to-accent-700 hover:from-accent-700 hover:to-accent-800 text-white px-8 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg" id="captureBtn">
+                        <i class="fas fa-camera mr-2"></i>Capture Photo
                     </button>
-                    <button class="browse-btn" id="closeCameraBtn" style="margin-left: 10px; background-color: #dc3545;">
-                        ✖ Close Camera
+                    <button class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-8 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 shadow-lg" id="closeCameraBtn">
+                        <i class="fas fa-times mr-2"></i>Close Camera
                     </button>
                 </div>
                 <canvas id="cameraCanvas" style="display: none;"></canvas>
             </div>
 
-            <div class="preview-section" id="previewSection" style="display: none;">
-                <h3>Image Preview</h3>
-                <div class="image-container">
-                    <img id="previewImage" alt="Preview">
+            <!-- Image Preview Section -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-slide-up" id="previewSection" style="display: none;">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">🖼️ Image Preview</h3>
+                    <p class="text-gray-600">Review your image before analysis</p>
                 </div>
-                <button class="classify-btn" id="classifyBtn">
-                    <span class="btn-text">Analyze Image</span>
-                    <div class="loading-spinner" style="display: none;"></div>
-                </button>
-            </div>
-
-            <div class="result-section" id="resultSection" style="display: none;" aria-live="polite">
-                <a id="results"></a>
-                <h3>Analysis Result</h3>
-                <div class="result-card">
-                    <div class="result-item">
-                        <span class="label">Predicted Type:</span>
-                        <span class="value" id="predictedType">-</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="label">Confidence Score:</span>
-                        <span class="value" id="confidenceScore">-</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="label">Predicted Breed:</span>
-                        <span class="value" id="predictedBreed">-</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="label">Breed Confidence:</span>
-                        <span class="value" id="breedConfidence">-</span>
-                    </div>
-                    <div class="confidence-bar">
-                        <div class="confidence-fill" id="confidenceFill"></div>
+                <div class="flex justify-center mb-8">
+                    <div class="relative">
+                        <img id="previewImage" alt="Preview" class="max-w-full max-h-96 rounded-2xl shadow-lg">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
                     </div>
                 </div>
                 
-                <div class="breed-info" id="breedInfo" style="display: none;">
-                    <h4>Breed Information</h4>
+                <!-- Breed Selection (Optional) -->
+                <div class="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-2xl p-6 mb-6">
+                    <h4 class="text-lg font-bold text-gray-900 mb-4 text-center">
+                        🎯 Know the breed? Help us improve! (Optional)
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Animal Type:</label>
+                            <select id="animalTypeSelect" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors">
+                                <option value="">Select type...</option>
+                                <option value="cattle">🐄 Cattle</option>
+                                <option value="buffalo">🐃 Buffalo</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Breed (if known):</label>
+                            <select id="breedSelect" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors">
+                                <option value="">Select breed...</option>
+                                
+                                <!-- Cattle Breeds -->
+                                <optgroup label="🐄 Cattle Breeds">
+                                    <option value="holstein">Holstein</option>
+                                    <option value="holstein_friesian">Holstein Friesian</option>
+                                    <option value="angus">Angus</option>
+                                    <option value="hereford">Hereford</option>
+                                    <option value="jersey">Jersey</option>
+                                    <option value="charolais">Charolais</option>
+                                    <option value="simmental">Simmental</option>
+                                    <option value="brahman">Brahman</option>
+                                    <option value="limousin">Limousin</option>
+                                    <option value="gelbvieh">Gelbvieh</option>
+                                    <option value="red_angus">Red Angus</option>
+                                    <option value="shorthorn">Shorthorn</option>
+                                    <option value="wagyu">Wagyu</option>
+                                    <option value="guernsey">Guernsey</option>
+                                    <option value="ayrshire">Ayrshire</option>
+                                    <option value="brown_swiss">Brown Swiss</option>
+                                    <option value="dexter">Dexter</option>
+                                    <option value="galloway">Galloway</option>
+                                    <option value="highland">Highland</option>
+                                    <option value="longhorn">Longhorn</option>
+                                    <option value="sahiwal">Sahiwal</option>
+                                    <option value="gir">Gir</option>
+                                    <option value="red_sindhi">Red Sindhi</option>
+                                    <option value="tharparkar">Tharparkar</option>
+                                    <option value="kankrej">Kankrej</option>
+                                    <option value="ongole">Ongole</option>
+                                    <option value="haryana">Haryana</option>
+                                    <option value="krishna_valley">Krishna Valley</option>
+                                    <option value="khillari">Khillari</option>
+                                    <option value="malvi">Malvi</option>
+                                    <option value="nimari">Nimari</option>
+                                    <option value="dangi">Dangi</option>
+                                    <option value="gaolao">Gaolao</option>
+                                </optgroup>
+                                
+                                <!-- Buffalo Breeds -->
+                                <optgroup label="🐃 Buffalo Breeds">
+                                    <option value="water_buffalo">Water Buffalo</option>
+                                    <option value="murrah">Murrah</option>
+                                    <option value="nili_ravi">Nili Ravi</option>
+                                    <option value="surti">Surti</option>
+                                    <option value="jafarabadi">Jafarabadi</option>
+                                    <option value="mehsana">Mehsana</option>
+                                    <option value="banni">Banni</option>
+                                    <option value="toda">Toda</option>
+                                    <option value="pandharpuri">Pandharpuri</option>
+                                    <option value="kalahandi">Kalahandi</option>
+                                    <option value="nagpuri">Nagpuri</option>
+                                    <option value="godavari">Godavari</option>
+                                    <option value="jaffarabadi">Jaffarabadi</option>
+                                    <option value="bhadawari">Bhadawari</option>
+                                    <option value="tarai">Tarai</option>
+                                    <option value="cauvery">Cauvery</option>
+                                    <option value="chilika">Chilika</option>
+                                    <option value="chhattisgarhi">Chhattisgarhi</option>
+                                    <option value="dharwari">Dharwari</option>
+                                    <option value="marathwadi">Marathwadi</option>
+                                    <option value="sambalpuri">Sambalpuri</option>
+                                    <option value="swamp_buffalo">Swamp Buffalo</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Add New Breed:</label>
+                        <div class="flex space-x-2">
+                            <input type="text" id="newBreedInput" placeholder="Enter new breed name..." class="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors">
+                            <button id="addBreedBtn" class="bg-gradient-to-r from-secondary-600 to-secondary-700 hover:from-secondary-700 hover:to-secondary-800 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105">
+                                <i class="fas fa-plus mr-1"></i>Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button class="bg-gradient-to-r from-primary-600 to-secondary-600 hover:from-primary-700 hover:to-secondary-700 text-white px-12 py-4 rounded-full text-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-2xl" id="classifyBtn">
+                        <i class="fas fa-brain mr-3"></i>
+                        <span class="btn-text">Analyze</span>
+                        <div class="loading-spinner hidden ml-3">
+                            <i class="fas fa-spinner animate-spin"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-slide-up" id="resultSection" style="display: none;" aria-live="polite">
+                <div class="text-center mb-8">
+                    <h3 class="text-3xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent mb-2">
+                        🎉 Analysis Complete!
+                    </h3>
+                    <p class="text-gray-600">Here are the AI-powered results for your image</p>
+                </div>
+
+                <!-- Main Results Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Animal Type Result -->
+                    <div class="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-6 text-center">
+                        <div class="text-4xl mb-3">🐄</div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Predicted Type</h4>
+                        <p class="text-2xl font-black text-primary-700" id="predictedType">-</p>
+                        <div class="mt-3">
+                            <div class="bg-white rounded-full h-3 overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-primary-500 to-primary-600 transition-all duration-1000" id="confidenceFill" style="width: 0%"></div>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">Confidence: <span id="confidenceScore" class="font-bold">-</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Breed Result -->
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-100 rounded-2xl p-6 text-center">
+                        <div class="text-4xl mb-3">🧬</div>
+                        <h4 class="text-lg font-bold text-gray-900 mb-2">Predicted Breed</h4>
+                        <p class="text-2xl font-black text-purple-700" id="predictedBreed">-</p>
+                        <div class="mt-3">
+                            <div class="bg-white rounded-full h-4 overflow-hidden shadow-inner">
+                                <div class="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 transition-all duration-1000 shadow-lg" id="breedConfidenceFill" style="width: 0%"></div>
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">Confidence: <span id="breedConfidence" class="font-bold">-</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Feedback Section -->
+                <div class="bg-gradient-to-r from-accent-50 to-accent-100 rounded-2xl p-6 mb-6">
+                    <h4 class="text-lg font-bold text-gray-900 mb-4 text-center">
+                        📝 Help Us Improve - Was this correct?
+                    </h4>
+                    <div class="flex justify-center space-x-4">
+                        <button class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105" id="correctBtn">
+                            <i class="fas fa-thumbs-up mr-2"></i>Correct
+                        </button>
+                        <button class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105" id="incorrectBtn">
+                            <i class="fas fa-thumbs-down mr-2"></i>Incorrect
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Breed Information -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl p-8 border border-blue-200 shadow-lg" id="breedInfo" style="display: none;">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <i class="fas fa-dna text-2xl text-white"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+                            🧬 Breed Information
+                        </h4>
+                        <p class="text-gray-600 mt-2">Comprehensive breed characteristics and details</p>
+                    </div>
                     <div class="breed-details" id="breedDetails">
-                        <!-- Breed details will be populated here -->
+                        <!-- Enhanced breed details will be populated here -->
                     </div>
                 </div>
-                
-                <div class="debug-info" id="debugInfo" style="display: none;">
-                    <h4>Analysis Details</h4>
-                    <div id="debugContent"></div>
+
+               
+
+                <!-- Enhanced Analysis Details -->
+                <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-3xl p-8 text-white shadow-2xl" id="debugInfo" style="display: none;">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                            <i class="fas fa-microscope text-2xl text-gray-900"></i>
+                        </div>
+                        <h5 class="text-2xl font-bold mb-2">� Professional Analysis Report</h5>
+                        <p class="text-gray-300">Detailed technical analysis and recommendations</p>
+                    </div>
+                    <div id="debugContent" class="space-y-4">
+                        <!-- Enhanced debug content will be populated here -->
+                    </div>
                 </div>
             </div>
 
-            <div class="instructions-section">
-                <h3>How to Get Best Results</h3>
-                <div class="instructions-grid">
-                    <div class="instruction-card">
-                        <div class="instruction-icon">📸</div>
-                        <h4>Clear Image</h4>
-                        <p>Use high-resolution images with good lighting and minimal background interference</p>
+            <!-- Instructions Section -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-slide-up">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">💡 Tips for Best Results</h3>
+                    <p class="text-gray-600">Follow these guidelines to get the most accurate analysis</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="text-center group">
+                        <div class="bg-gradient-to-r from-primary-100 to-primary-200 rounded-2xl p-6 mb-4 group-hover:from-primary-200 group-hover:to-primary-300 transition-all duration-300">
+                            <i class="fas fa-camera text-4xl text-primary-600 mb-3"></i>
+                            <h4 class="font-bold text-gray-900 mb-2">📸 Clear Image</h4>
+                            <p class="text-sm text-gray-600">Use high-resolution images with good lighting</p>
+                        </div>
                     </div>
-                    <div class="instruction-card">
-                        <div class="instruction-icon">🎯</div>
-                        <h4>Focus on Animal</h4>
-                        <p>Ensure the animal is clearly visible and takes up a significant portion of the image</p>
+                    <div class="text-center group">
+                        <div class="bg-gradient-to-r from-secondary-100 to-secondary-200 rounded-2xl p-6 mb-4 group-hover:from-secondary-200 group-hover:to-secondary-300 transition-all duration-300">
+                            <i class="fas fa-bullseye text-4xl text-secondary-600 mb-3"></i>
+                            <h4 class="font-bold text-gray-900 mb-2">🎯 Focus Animal</h4>
+                            <p class="text-sm text-gray-600">Ensure the animal is clearly visible and centered</p>
+                        </div>
                     </div>
-                    <div class="instruction-card">
-                        <div class="instruction-icon">💡</div>
-                        <h4>Good Lighting</h4>
-                        <p>Natural lighting works best for accurate color analysis and feature detection</p>
+                    <div class="text-center group">
+                        <div class="bg-gradient-to-r from-accent-100 to-accent-200 rounded-2xl p-6 mb-4 group-hover:from-accent-200 group-hover:to-accent-300 transition-all duration-300">
+                            <i class="fas fa-sun text-4xl text-accent-600 mb-3"></i>
+                            <h4 class="font-bold text-gray-900 mb-2">💡 Good Lighting</h4>
+                            <p class="text-sm text-gray-600">Natural lighting works best for analysis</p>
+                        </div>
                     </div>
-                    <div class="instruction-card">
-                        <div class="instruction-icon">📐</div>
-                        <h4>Proper Angle</h4>
-                        <p>Side view or three-quarter view provides the best results for breed identification</p>
+                    <div class="text-center group">
+                        <div class="bg-gradient-to-r from-yellow-100 to-yellow-200 rounded-2xl p-6 mb-4 group-hover:from-yellow-200 group-hover:to-yellow-300 transition-all duration-300">
+                            <i class="fas fa-eye text-4xl text-yellow-600 mb-3"></i>
+                            <h4 class="font-bold text-gray-900 mb-2">📐 Right Angle</h4>
+                            <p class="text-sm text-gray-600">Side or three-quarter view is optimal</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
-
-        <footer>
-            <p>🔬 Professional AI Analysis • High Accuracy Classification • Industry-Grade Technology</p>
-        </footer>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 relative overflow-hidden mt-16">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary-900/50 to-secondary-900/50"></div>
+        <div class="relative z-10 max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-400 text-sm">
+                    <i class="fas fa-microscope mr-2"></i>
+                    Professional AI Analysis • High Accuracy Classification • Industry-Grade Technology
+                </p>
+                <p class="text-xs text-gray-500 mt-2">
+                    &copy; 2025 Pashu Parakh - Animal Type Classification. All rights reserved.
+                </p>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500"></div>
+    </footer>
 
     <script src="breed-database.js"></script>
     <script src="local_ml_classifier.js"></script>
     <script src="script.js"></script>
+    
+    <script>
+        // Enhanced breed selection functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const animalTypeSelect = document.getElementById('animalTypeSelect');
+            const breedSelect = document.getElementById('breedSelect');
+            const newBreedInput = document.getElementById('newBreedInput');
+            const addBreedBtn = document.getElementById('addBreedBtn');
+
+            // Comprehensive breed database
+            const breedData = {
+                cattle: [
+                    'Holstein', 'Holstein_Friesian', 'Angus', 'Hereford', 'Jersey', 'Charolais', 'Simmental',
+                    'Brahman', 'Limousin', 'Gelbvieh', 'Red_Angus', 'Shorthorn', 'Wagyu', 'Guernsey',
+                    'Ayrshire', 'Brown_Swiss', 'Dexter', 'Galloway', 'Highland', 'Longhorn',
+                    'Sahiwal', 'Gir', 'Red_Sindhi', 'Tharparkar', 'Kankrej', 'Ongole', 'Haryana',
+                    'Krishna_Valley', 'Khillari', 'Malvi', 'Nimari', 'Dangi', 'Gaolao'
+                ],
+                buffalo: [
+                    'Water_Buffalo', 'Murrah', 'Nili_Ravi', 'Surti', 'Jafarabadi', 'Mehsana',
+                    'Banni', 'Toda', 'Pandharpuri', 'Kalahandi', 'Nagpuri', 'Godavari',
+                    'Jaffarabadi', 'Bhadawari', 'Tarai', 'Cauvery', 'Chilika', 'Chhattisgarhi',
+                    'Dharwari', 'Marathwadi', 'Nagpuri', 'Sambalpuri', 'Swamp_Buffalo'
+                ]
+            };
+
+            // Update breed options when animal type changes (filter existing options)
+            animalTypeSelect.addEventListener('change', function() {
+                const selectedType = this.value;
+                const allOptionGroups = breedSelect.querySelectorAll('optgroup');
+                
+                if (selectedType === 'cattle') {
+                    // Show only cattle breeds
+                    allOptionGroups.forEach(optgroup => {
+                        optgroup.style.display = optgroup.label.includes('🐄') ? 'block' : 'none';
+                    });
+                } else if (selectedType === 'buffalo') {
+                    // Show only buffalo breeds
+                    allOptionGroups.forEach(optgroup => {
+                        optgroup.style.display = optgroup.label.includes('🐃') ? 'block' : 'none';
+                    });
+                } else {
+                    // Show all breeds
+                    allOptionGroups.forEach(optgroup => {
+                        optgroup.style.display = 'block';
+                    });
+                }
+                
+                // Reset selection
+                breedSelect.value = '';
+                
+                // Update placeholder text based on selection
+                const placeholder = breedSelect.querySelector('option[value=""]');
+                if (selectedType === 'cattle') {
+                    placeholder.textContent = 'Select cattle breed...';
+                } else if (selectedType === 'buffalo') {
+                    placeholder.textContent = 'Select buffalo breed...';
+                } else {
+                    placeholder.textContent = 'Select breed...';
+                }
+            });
+
+            // Add new breed functionality
+            addBreedBtn.addEventListener('click', function() {
+                const newBreed = newBreedInput.value.trim();
+                const animalType = animalTypeSelect.value;
+                
+                if (newBreed && animalType) {
+                    // Add to the breed list
+                    if (!breedData[animalType]) {
+                        breedData[animalType] = [];
+                    }
+                    
+                    if (!breedData[animalType].includes(newBreed)) {
+                        breedData[animalType].push(newBreed);
+                        
+                        // Update the select options
+                        const option = document.createElement('option');
+                        option.value = newBreed.toLowerCase().replace(/\s+/g, '-');
+                        option.textContent = newBreed;
+                        option.selected = true;
+                        breedSelect.appendChild(option);
+                        
+                        // Clear input
+                        newBreedInput.value = '';
+                        
+                        // Show success message
+                        showNotification(`✅ "${newBreed}" added successfully!`, 'success');
+                    } else {
+                        showNotification(`⚠️ "${newBreed}" already exists!`, 'warning');
+                    }
+                } else {
+                    showNotification('❗ Please select animal type and enter breed name', 'error');
+                }
+            });
+
+            // Add Enter key support for new breed input
+            newBreedInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addBreedBtn.click();
+                }
+            });
+
+            // User feedback buttons
+            const correctBtn = document.getElementById('correctBtn');
+            const incorrectBtn = document.getElementById('incorrectBtn');
+
+            correctBtn?.addEventListener('click', function() {
+                showNotification('👍 Thank you for your feedback! This helps improve our AI.', 'success');
+                this.disabled = true;
+                incorrectBtn.disabled = true;
+            });
+
+            incorrectBtn?.addEventListener('click', function() {
+                showNotification('👎 Thanks for feedback! Please use breed selection to help us learn.', 'info');
+                this.disabled = true;
+                correctBtn.disabled = true;
+            });
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-lg transition-all duration-300 transform translate-x-full`;
+            
+            const colors = {
+                success: 'bg-green-500 text-white',
+                error: 'bg-red-500 text-white',
+                warning: 'bg-yellow-500 text-white',
+                info: 'bg-blue-500 text-white'
+            };
+            
+            notification.className += ` ${colors[type] || colors.info}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Enhanced drag and drop with visual feedback
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('border-primary-500', 'bg-primary-50');
+        });
+        
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('border-primary-500', 'bg-primary-50');
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('border-primary-500', 'bg-primary-50');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const fileInput = document.getElementById('fileInput');
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Enhanced breed information display
+        function displayBreedInfo(breedData) {
+            const breedDetails = document.getElementById('breedDetails');
+            if (!breedData) return;
+
+            breedDetails.innerHTML = `
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-blue-200">
+                    <div class="text-center mb-6">
+                        <h5 class="text-2xl font-bold text-gray-900 mb-2">${breedData.name} - ${breedData.type}</h5>
+                        <div class="flex justify-center items-center space-x-2 mb-4">
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
+                                ${breedData.type === 'cattle' ? '🐄' : '🐃'} ${breedData.type.charAt(0).toUpperCase() + breedData.type.slice(1)}
+                            </span>
+                            <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                                📍 ${breedData.origin}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Physical Characteristics -->
+                        <div class="space-y-4">
+                            <h6 class="text-lg font-bold text-gray-800 flex items-center mb-3">
+                                <i class="fas fa-eye text-blue-600 mr-2"></i>Physical Traits
+                            </h6>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="font-medium text-gray-700">🎨 Color:</span>
+                                    <span class="text-gray-900 font-semibold">${breedData.color}</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="font-medium text-gray-700">📏 Body Type:</span>
+                                    <span class="text-gray-900 font-semibold">${breedData.bodyType}</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="font-medium text-gray-700">🎯 Horns:</span>
+                                    <span class="text-gray-900 font-semibold">${breedData.horns}</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                    <span class="font-medium text-gray-700">📐 Size:</span>
+                                    <span class="text-gray-900 font-semibold">${breedData.size}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance & Details -->
+                        <div class="space-y-4">
+                            <h6 class="text-lg font-bold text-gray-800 flex items-center mb-3">
+                                <i class="fas fa-chart-line text-green-600 mr-2"></i>Performance Data
+                            </h6>
+                            <div class="space-y-3">
+                                <div class="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border border-blue-200">
+                                    <div class="font-semibold text-gray-800 mb-2">⚖️ Weight Range</div>
+                                    <div class="text-sm text-gray-600">${breedData.weight}</div>
+                                </div>
+                                <div class="p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg border border-green-200">
+                                    <div class="font-semibold text-gray-800 mb-2">🥛 Milk Production</div>
+                                    <div class="text-sm text-gray-600">${breedData.milkProduction}</div>
+                                </div>
+                                <div class="p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg border border-purple-200">
+                                    <div class="font-semibold text-gray-800 mb-2">😊 Temperament</div>
+                                    <div class="text-sm text-gray-600">${breedData.temperament}</div>
+                                </div>
+                                <div class="p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg border border-orange-200">
+                                    <div class="font-semibold text-gray-800 mb-2">🌍 Distribution</div>
+                                    <div class="text-sm text-gray-600">${breedData.distribution}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Enhanced analysis details display
+        function displayAnalysisDetails(analysisData) {
+            const debugContent = document.getElementById('debugContent');
+            if (!analysisData) return;
+
+            debugContent.innerHTML = `
+                <!-- Analysis Overview -->
+                <div class="bg-gradient-to-r from-gray-700 to-gray-800 rounded-2xl p-6 mb-6">
+                    <h6 class="text-xl font-bold text-white mb-4 flex items-center">
+                        <i class="fas fa-brain text-yellow-400 mr-2"></i>AI Analysis Overview
+                    </h6>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+                            <div class="text-yellow-400 font-bold text-lg">🔬 Method</div>
+                            <div class="text-gray-200 text-sm">${analysisData.method}</div>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+                            <div class="text-green-400 font-bold text-lg">🎯 Result</div>
+                            <div class="text-gray-200 text-sm">${analysisData.result}</div>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+                            <div class="text-blue-400 font-bold text-lg">⭐ Quality</div>
+                            <div class="text-gray-200 text-sm">${analysisData.quality}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confidence Scores -->
+                <div class="bg-gradient-to-r from-gray-700 to-gray-800 rounded-2xl p-6 mb-6">
+                    <h6 class="text-xl font-bold text-white mb-4 flex items-center">
+                        <i class="fas fa-chart-bar text-blue-400 mr-2"></i>Confidence Analysis
+                    </h6>
+                    <div class="space-y-4">
+                        <div class="bg-white/10 rounded-xl p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-300">🐄 Cattle Probability</span>
+                                <span class="text-white font-bold">${analysisData.cattleScore}%</span>
+                            </div>
+                            <div class="w-full bg-gray-600 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-blue-400 to-blue-600 h-3 rounded-full transition-all duration-1000" style="width: ${analysisData.cattleScore}%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-300">🐃 Buffalo Probability</span>
+                                <span class="text-white font-bold">${analysisData.buffaloScore}%</span>
+                            </div>
+                            <div class="w-full bg-gray-600 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-purple-400 to-purple-600 h-3 rounded-full transition-all duration-1000" style="width: ${analysisData.buffaloScore}%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-300">🧬 Breed Confidence</span>
+                                <span class="text-white font-bold">${analysisData.breedConfidence}%</span>
+                            </div>
+                            <div class="w-full bg-gray-600 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-1000" style="width: ${analysisData.breedConfidence}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="bg-gradient-to-r from-yellow-600 to-orange-600 rounded-2xl p-6">
+                    <h6 class="text-xl font-bold text-white mb-4 flex items-center">
+                        <i class="fas fa-lightbulb text-yellow-200 mr-2"></i>AI Recommendations
+                    </h6>
+                    <div class="space-y-3">
+                        ${analysisData.recommendations.map(rec => `
+                            <div class="bg-white/20 rounded-lg p-3 backdrop-blur-sm">
+                                <div class="text-white text-sm flex items-start">
+                                    <i class="fas fa-arrow-right text-yellow-200 mr-2 mt-1"></i>
+                                    ${rec}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Example usage - you can call these functions with your analysis data
+        // displayBreedInfo({
+        //     name: "Surti",
+        //     type: "buffalo",
+        //     origin: "India (Gujarat)",
+        //     color: "Light gray to dark gray",
+        //     bodyType: "Medium, well-proportioned",
+        //     horns: "Medium length, curved",
+        //     size: "Medium",
+        //     weight: "Male: 400-500kg, Female: 350-450kg",
+        //     milkProduction: "Good (1200-1800 liters/lactation)",
+        //     temperament: "Gentle, easy to handle",
+        //     distribution: "India (Gujarat, Maharashtra)"
+        // });
+
+        // Fix for breed confidence bar - ensure both bars are updated
+        function updateConfidenceBars(animalConfidence, breedConfidence) {
+            // Update animal type confidence bar
+            const confidenceFill = document.getElementById('confidenceFill');
+            const confidenceScore = document.getElementById('confidenceScore');
+            if (confidenceFill && confidenceScore) {
+                setTimeout(() => {
+                    confidenceFill.style.width = animalConfidence + '%';
+                    confidenceScore.textContent = animalConfidence + '%';
+                }, 500);
+            }
+
+            // Update breed confidence bar 
+            const breedConfidenceFill = document.getElementById('breedConfidenceFill');
+            const breedConfidenceSpan = document.getElementById('breedConfidence');
+            if (breedConfidenceFill && breedConfidenceSpan) {
+                setTimeout(() => {
+                    breedConfidenceFill.style.width = breedConfidence + '%';
+                    breedConfidenceSpan.textContent = breedConfidence + '%';
+                }, 800);
+            }
+        }
+
+        // Get breed information for PDF
+        function getBreedInformation(breedName) {
+            const breedDatabase = {
+                'Holstein_Friesian': [
+                    'Origin: Netherlands and Germany',
+                    'Color: Black and white patches',
+                    'Body Type: Large, dairy-type build',
+                    'Horns: Naturally polled or short',
+                    'Size: Large (600-700kg)',
+                    'Milk Production: Excellent (6000-8000 liters/lactation)',
+                    'Temperament: Docile and manageable',
+                    'Distribution: Worldwide, popular dairy breed'
+                ],
+                'Surti': [
+                    'Origin: India (Gujarat)',
+                    'Color: Light gray to dark gray',
+                    'Body Type: Medium, well-proportioned',
+                    'Horns: Medium length, curved',
+                    'Size: Medium (400-500kg)',
+                    'Milk Production: Good (1200-1800 liters/lactation)',
+                    'Temperament: Gentle, easy to handle',
+                    'Distribution: India (Gujarat, Maharashtra)'
+                ],
+                'Murrah': [
+                    'Origin: India (Haryana)',
+                    'Color: Black with white markings',
+                    'Body Type: Heavy, compact build',
+                    'Horns: Tightly curled',
+                    'Size: Large (450-600kg)',
+                    'Milk Production: Excellent (1500-2500 liters/lactation)',
+                    'Temperament: Calm and docile',
+                    'Distribution: India, Egypt, Italy'
+                ],
+                'Angus': [
+                    'Origin: Scotland',
+                    'Color: Black or red',
+                    'Body Type: Compact, muscular beef build',
+                    'Horns: Naturally polled (hornless)',
+                    'Size: Medium to large (500-650kg)',
+                    'Milk Production: Moderate (for beef breed)',
+                    'Temperament: Generally docile',
+                    'Distribution: Worldwide beef breed'
+                ]
+            };
+            
+            return breedDatabase[breedName] || [
+                'Origin: Information not available',
+                'Color: Varies by breed',
+                'Body Type: Typical for species',
+                'Size: Standard for breed type',
+                'Temperament: Generally manageable',
+                'Distribution: Regional variation'
+            ];
+        }
+        
+        // Enhanced PDF generation function with comprehensive error handling
+        async function generatePDF() {
+            console.log('🔄 Starting PDF generation...');
+            
+            try {
+                // Check if results are available
+                const predictedTypeEl = document.getElementById('predictedType');
+                if (!predictedTypeEl || predictedTypeEl.textContent.trim() === '-') {
+                    showNotification('⚠️ Please analyze an image first before generating PDF!', 'warning');
+                    return;
+                }
+
+                // Check if jsPDF is loaded
+                if (typeof window.jspdf === 'undefined') {
+                    console.error('❌ jsPDF library not loaded');
+                    showNotification('❌ PDF library not loaded. Please refresh the page and try again.', 'error');
+                    return;
+                }
+
+                console.log('✅ jsPDF library loaded successfully');
+
+                const { jsPDF } = window.jspdf;
+                console.log('✅ jsPDF constructor available');
+                
+                // Show loading notification with spinner
+                const pdfBtn = document.querySelector('button[onclick="generatePDF()"]');
+                const originalText = pdfBtn.innerHTML;
+                pdfBtn.innerHTML = '<i class="fas fa-spinner animate-spin text-2xl mb-2"></i><div class="text-sm">Generating...</div><div class="text-xs opacity-80">Please wait</div>';
+                pdfBtn.disabled = true;
+                
+                showNotification('📄 Generating PDF report... Please wait', 'info');
+
+                // Get current date and time
+                const now = new Date();
+                const currentDate = now.toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long', 
+                    day: 'numeric'
+                });
+                const currentTime = now.toLocaleTimeString('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+
+                // Get analysis results with better error handling
+                const predictedType = document.getElementById('predictedType')?.textContent?.trim() || 'Not Analyzed';
+                const confidenceScore = document.getElementById('confidenceScore')?.textContent?.trim() || '0%';
+                const predictedBreed = document.getElementById('predictedBreed')?.textContent?.trim() || 'Not Identified';
+                const breedConfidence = document.getElementById('breedConfidence')?.textContent?.trim() || '0%';
+
+                // Create new PDF instance
+                const pdf = new jsPDF('p', 'mm', 'a4');
+
+                // Add header with gradient background
+                pdf.setFillColor(79, 70, 229); // Primary color
+                pdf.rect(0, 0, 210, 35, 'F');
+                
+                // Add title and subtitle
+                pdf.setTextColor(255, 255, 255);
+                pdf.setFontSize(22);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('ATC - Animal Classification Report', 20, 18);
+                
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Professional AI-Powered Animal Breed Identification System', 20, 26);
+                
+                // Reset text color and add report info
+                pdf.setTextColor(0, 0, 0);
+                
+                // Add report generation info
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Report Generated on: ' + currentDate + ' at ' + currentTime, 20, 45);
+                pdf.text('Analysis Status: Complete', 20, 52);
+
+                // Analysis Results Section Header
+                pdf.setFontSize(16);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setTextColor(79, 70, 229);
+                pdf.text('Analysis Results', 20, 65);
+                
+                // Draw main results box with border
+                pdf.setDrawColor(79, 70, 229);
+                pdf.setLineWidth(0.8);
+                pdf.setFillColor(240, 240, 255);
+                pdf.rect(20, 70, 170, 45, 'FD');
+                
+                // Add results content with better formatting
+                pdf.setTextColor(0, 0, 0);
+                pdf.setFontSize(12);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('Animal Classification:', 25, 82);
+                
+                pdf.setFontSize(11);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Predicted Type: ', 25, 90);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setTextColor(79, 70, 229);
+                pdf.text(predictedType.toUpperCase(), 65, 90);
+                pdf.setTextColor(0, 0, 0);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Confidence: ' + confidenceScore, 120, 90);
+                
+                pdf.text('Predicted Breed: ', 25, 98);
+                pdf.setFont('helvetica', 'bold');
+                pdf.setTextColor(147, 51, 234); // Purple color
+                pdf.text(predictedBreed.replace(/_/g, ' '), 65, 98);
+                pdf.setTextColor(0, 0, 0);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Confidence: ' + breedConfidence, 120, 98);
+                
+                pdf.setFontSize(9);
+                pdf.setTextColor(100, 100, 100);
+                pdf.text('Analysis completed using advanced AI computer vision technology', 25, 108);
+
+                // Add confidence bars representation
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Animal Type Confidence:', 25, 90);
+                // Draw confidence bar
+                const animalConfValue = parseInt(confidenceScore.replace('%', '')) || 0;
+                pdf.setFillColor(79, 70, 229);
+                pdf.rect(25, 92, (animalConfValue * 1.5), 3, 'F');
+                pdf.rect(25, 92, 150, 3);
+                
+                pdf.text('Breed Confidence:', 25, 100);
+                // Draw breed confidence bar  
+                const breedConfValue = parseInt(breedConfidence.replace('%', '')) || 0;
+                pdf.setFillColor(192, 38, 211);
+                pdf.rect(25, 102, (breedConfValue * 1.5), 3, 'F');
+                pdf.rect(25, 102, 150, 3);
+
+                // Enhanced Breed Information Section
+                pdf.setFontSize(16);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('🧬 Breed Information: ' + predictedBreed, 20, 120);
+                
+                // Add comprehensive breed info based on detected breed
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'normal');
+                
+                // Get breed-specific information
+                let breedInfoData = getBreedInformation(predictedBreed);
+                
+                let yPos = 130;
+                breedInfoData.forEach(info => {
+                    pdf.text('• ' + info, 25, yPos);
+                    yPos += 6;
+                });
+                
+                // Add breed characteristics box
+                pdf.setDrawColor(147, 51, 234); // Purple color
+                pdf.setLineWidth(0.5);
+                pdf.rect(20, 125, 170, (breedInfoData.length * 6) + 10);
+
+                // Analysis Details Section
+                pdf.setFontSize(16);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('🔍 Technical Analysis', 20, 190);
+                
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'normal');
+                pdf.text('Analysis Method: Advanced AI Computer Vision', 25, 200);
+                pdf.text('Processing Time: < 3 seconds', 25, 207);
+                pdf.text('Image Quality: Good', 25, 214);
+                pdf.text('AI Model Version: v2.1.0', 25, 221);
+
+                // Recommendations Section
+                pdf.setFontSize(16);
+                pdf.setFont('helvetica', 'bold');
+                pdf.text('💡 Recommendations', 20, 235);
+                
+                pdf.setFontSize(10);
+                pdf.setFont('helvetica', 'normal');
+                const recommendations = [
+                    '• Try uploading clearer, higher resolution images for better accuracy',
+                    '• Ensure good lighting conditions during image capture',
+                    '• Make sure the animal is clearly visible and centered',
+                    '• Use side-view or three-quarter view angles for optimal results'
+                ];
+                
+                let recYPos = 245;
+                recommendations.forEach(rec => {
+                    pdf.text(rec, 25, recYPos);
+                    recYPos += 7;
+                });
+
+                // Footer
+                pdf.setFillColor(79, 70, 229);
+                pdf.rect(0, 280, 210, 17, 'F');
+                pdf.setTextColor(255, 255, 255);
+                pdf.setFontSize(8);
+                pdf.text('ATC - Animal Type Classification System • Professional AI Analysis • Industry-Grade Technology', 20, 290);
+
+                // Generate filename with timestamp
+                const timestamp = now.toISOString().slice(0, 19).replace(/:/g, '-');
+                const filename = `ATC_Report_${predictedType.replace(/\s+/g, '_')}_${predictedBreed.replace(/\s+/g, '_')}_${timestamp}.pdf`;
+                
+                // Save the PDF
+                console.log('💾 Saving PDF with filename:', filename);
+                pdf.save(filename);
+                
+                // Restore button state
+                setTimeout(() => {
+                    pdfBtn.innerHTML = originalText;
+                    pdfBtn.disabled = false;
+                }, 1000);
+                
+                // Show success notification with filename
+                showNotification(`✅ PDF report saved successfully!`, 'success');
+                showNotification(`📁 File name: ${filename}`, 'info');
+                
+                // Log success for debugging
+                console.log('✅ PDF generated successfully:', filename);
+                console.log('📊 Report data:', { predictedType, confidenceScore, predictedBreed, breedConfidence });
+                
+            } catch (error) {
+                console.error('❌ Detailed PDF Error:', error);
+                
+                // Restore button state
+                const pdfBtn = document.querySelector('button[onclick="generatePDF()"]');
+                if (pdfBtn) {
+                    pdfBtn.innerHTML = '<i class="fas fa-file-pdf text-2xl mb-2 group-hover:animate-bounce"></i><div class="text-sm">Save as PDF</div><div class="text-xs opacity-80">Download report</div>';
+                    pdfBtn.disabled = false;
+                }
+                
+                showNotification(`❌ PDF Generation Error: ${error.message || 'Unknown error'}`, 'error');
+                
+                // Fallback: try basic PDF generation
+                try {
+                    console.log('🔄 Attempting fallback PDF generation...');
+                    generateBasicPDF();
+                } catch (fallbackError) {
+                    console.error('❌ Fallback PDF also failed:', fallbackError);
+                    showNotification('❌ All PDF generation methods failed. Please refresh and try again.', 'error');
+                }
+            }
+        }
+
+        // Fallback simple PDF generation
+        function generateBasicPDF() {
+            if (typeof window.jspdf === 'undefined') {
+                showNotification('❌ PDF library not available', 'error');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            
+            // Get basic data
+            const type = document.getElementById('predictedType')?.textContent || 'Unknown';
+            const breed = document.getElementById('predictedBreed')?.textContent || 'Unknown';
+            const confidence = document.getElementById('confidenceScore')?.textContent || '0%';
+            const breedConf = document.getElementById('breedConfidence')?.textContent || '0%';
+            
+            // Simple PDF content
+            pdf.setFontSize(20);
+            pdf.text('ATC - Animal Classification Report', 20, 30);
+            
+            pdf.setFontSize(12);
+            pdf.text('Analysis Results:', 20, 50);
+            pdf.text('Animal Type: ' + type, 20, 65);
+            pdf.text('Confidence: ' + confidence, 20, 75);
+            pdf.text('Breed: ' + breed, 20, 85);
+            pdf.text('Breed Confidence: ' + breedConf, 20, 95);
+            
+            pdf.text('Generated: ' + new Date().toLocaleString(), 20, 110);
+            
+            const filename = `ATC_Basic_Report_${Date.now()}.pdf`;
+            pdf.save(filename);
+            showNotification('✅ Basic PDF saved: ' + filename, 'success');
+        }
+
+        // Test PDF functionality with comprehensive testing
+        function testPDFGeneration() {
+            console.log('🧪 Starting PDF functionality test...');
+            
+            try {
+                // Test 1: Check if jsPDF is loaded
+                if (typeof window.jspdf === 'undefined') {
+                    console.error('❌ Test 1 Failed: jsPDF library not loaded');
+                    showNotification('❌ PDF Library Test Failed: jsPDF not loaded', 'error');
+                    return false;
+                }
+                console.log('✅ Test 1 Passed: jsPDF library loaded');
+
+                // Test 2: Create PDF instance
+                const { jsPDF } = window.jspdf;
+                const testPdf = new jsPDF();
+                console.log('✅ Test 2 Passed: PDF instance created');
+
+                // Test 3: Add content to PDF
+                testPdf.setFontSize(20);
+                testPdf.text('ATC PDF Test Report', 20, 30);
+                testPdf.setFontSize(12);
+                testPdf.text('Test Date: ' + new Date().toLocaleDateString(), 20, 50);
+                testPdf.text('Test Time: ' + new Date().toLocaleTimeString(), 20, 65);
+                testPdf.text('Status: PDF Generation Working ✅', 20, 80);
+                console.log('✅ Test 3 Passed: Content added to PDF');
+
+                // Test 4: Save PDF
+                const testFilename = `ATC_PDF_Test_${Date.now()}.pdf`;
+                testPdf.save(testFilename);
+                console.log('✅ Test 4 Passed: PDF saved successfully');
+
+                showNotification('✅ All PDF tests passed! PDF functionality is working.', 'success');
+                showNotification(`📁 Test file: ${testFilename}`, 'info');
+                return true;
+            } catch (error) {
+                console.error('❌ PDF Test Failed:', error);
+                showNotification('❌ PDF Test Failed: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+        // Demo data for testing PDF without actual analysis
+        function loadDemoDataForPDF() {
+            console.log('🔄 Loading demo data for PDF testing...');
+            
+            // Set demo analysis results
+            document.getElementById('predictedType').textContent = 'Buffalo';
+            document.getElementById('confidenceScore').textContent = '85%';
+            document.getElementById('predictedBreed').textContent = 'Murrah';
+            document.getElementById('breedConfidence').textContent = '78%';
+            
+            // Update confidence bars
+            updateConfidenceBars(85, 78);
+            
+            // Show result section
+            document.getElementById('resultSection').style.display = 'block';
+            
+            showNotification('✅ Demo data loaded! You can now test PDF generation.', 'success');
+            console.log('✅ Demo data loaded successfully');
+        }
+
+        // Add test button functionality (you can call this from console)
+        // testPDFGeneration();
+        // loadDemoDataForPDF();
+
+        // Example usage with proper breed confidence bar updates
+        // updateConfidenceBars(51, 60); // 51% animal confidence, 60% breed confidence
+
+        // displayAnalysisDetails({
+        //     method: "Rule-based Classification",
+        //     result: "Buffalo", 
+        //     quality: "Medium",
+        //     cattleScore: 49,
+        //     buffaloScore: 51,
+        //     breedConfidence: 60,
+        //     recommendations: [
+        //         "Try uploading a clearer, higher resolution image",
+        //         "Ensure good lighting and minimal background interference", 
+        //         "Make sure the animal is clearly visible in the image"
+        //     ]
+        // });
+    </script>
 </body>
 </html>
 

@@ -3,152 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Information - Fast Cattle vs Buffalo Classifier</title>
-    <link rel="stylesheet" href="style.css">
+    <title>System Information - ATC Animal Classification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            100: '#e0e9ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81'
+                        },
+                        secondary: {
+                            50: '#fef7ff',
+                            100: '#fce7ff',
+                            400: '#d946ef',
+                            500: '#c026d3',
+                            600: '#a21caf',
+                            700: '#86198f',
+                            800: '#701a75',
+                            900: '#581c87'
+                        },
+                        accent: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'pulse-slow': 'pulse 4s infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="brand">Fast Classifier</div>
-            <ul class="nav-links">
-                <li><a href="home.html">Home</a></li>
-                <li><a href="upload.html">Upload</a></li>
-                <li><a href="info.html" class="active">Info</a></li>
-                <li><a href="breeds.html">Breeds</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-            </ul>
+<body class="bg-gradient-to-br from-primary-50 via-white to-secondary-50 min-h-screen animate-fade-in">
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-lg border-b border-primary-200 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-paw text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-700 to-secondary-700 bg-clip-text text-transparent">ATC</h1>
+                                <p class="text-xs text-gray-600">Animal Type Classification</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-2">
+                        <a href="home.html" class="text-gray-700 hover:bg-gradient-to-r hover:from-primary-600 hover:to-secondary-600 hover:text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">Home</a>
+                        <a href="upload.html" class="text-gray-700 hover:bg-gradient-to-r hover:from-primary-600 hover:to-secondary-600 hover:text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">Upload</a>
+                        <a href="info.html" class="bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transform hover:scale-105 transition-all duration-300">Info</a>
+                        <a href="breeds.html" class="text-gray-700 hover:bg-gradient-to-r hover:from-primary-600 hover:to-secondary-600 hover:text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">Breeds</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
-    <div class="container">
-        <header>
-            <a id="module-info"></a>
-            <h1>Advanced Computer Vision System</h1>
-            <p>Learn about our cutting-edge AI technology and analysis methods</p>
-        </header>
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header Section -->
+        <div class="text-center mb-12 animate-slide-up">
+            <h1 class="text-4xl font-black bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent sm:text-5xl mb-4">
+                🔬 System Information
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Learn about our cutting-edge AI technology and advanced analysis methods
+            </p>
+        </div>
 
-        <main>
-            <section class="module-info" id="module-info">
-                <h3>Advanced Computer Vision System</h3>
-                <p>This cutting-edge system uses advanced computer vision techniques including Sobel edge detection, texture analysis, regional analysis, and multi-dimensional feature extraction to achieve high accuracy in cattle and buffalo classification. The system analyzes color histograms, brightness distribution, contrast patterns, and morphological features to provide professional-grade results.</p>
+        <main class="space-y-8">
+            <!-- Advanced Computer Vision System -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-slide-up">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-brain text-2xl text-white"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent mb-4">
+                        Advanced Computer Vision System
+                    </h2>
+                    <p class="text-lg text-gray-600 max-w-4xl mx-auto">
+                        This cutting-edge system uses advanced computer vision techniques including Sobel edge detection, texture analysis, regional analysis, and multi-dimensional feature extraction to achieve high accuracy in cattle and buffalo classification. The system analyzes color histograms, brightness distribution, contrast patterns, and morphological features to provide professional-grade results.
+                    </p>
+                </div>
                 
-                <div class="module-grid">
-                    <div class="module-card">
-                        <h4>Computer Vision Features</h4>
-                        <ul>
-                            <li>Sobel edge detection algorithms</li>
-                            <li>Local binary pattern analysis</li>
-                            <li>Regional brightness distribution</li>
-                            <li>Texture smoothness measurement</li>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-gradient-to-r from-primary-50 to-primary-100 rounded-2xl p-6 border border-primary-200 hover:shadow-lg transition-all duration-300">
+                        <div class="text-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-primary-500 to-primary-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                                <i class="fas fa-eye text-white text-lg"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-900 mb-3">Computer Vision Features</h4>
+                        </div>
+                        <ul class="space-y-3">
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-primary-500 mr-3"></i>
+                                Sobel edge detection algorithms
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-primary-500 mr-3"></i>
+                                Local binary pattern analysis
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-primary-500 mr-3"></i>
+                                Regional brightness distribution
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-primary-500 mr-3"></i>
+                                Texture smoothness measurement
+                            </li>
                         </ul>
                     </div>
-                    <div class="module-card">
-                        <h4>Advanced Classification</h4>
-                        <ul>
-                            <li>Multi-dimensional feature scoring</li>
-                            <li>Weighted algorithm optimization</li>
-                            <li>Pattern recognition algorithms</li>
-                            <li>Confidence-based validation</li>
+                    
+                    <div class="bg-gradient-to-r from-secondary-50 to-secondary-100 rounded-2xl p-6 border border-secondary-200 hover:shadow-lg transition-all duration-300">
+                        <div class="text-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-secondary-500 to-secondary-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                                <i class="fas fa-cogs text-white text-lg"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-900 mb-3">Advanced Classification</h4>
+                        </div>
+                        <ul class="space-y-3">
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-secondary-500 mr-3"></i>
+                                Multi-dimensional feature scoring
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-secondary-500 mr-3"></i>
+                                Weighted algorithm optimization
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-secondary-500 mr-3"></i>
+                                Pattern recognition algorithms
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-secondary-500 mr-3"></i>
+                                Confidence-based validation
+                            </li>
                         </ul>
                     </div>
-                    <div class="module-card">
-                        <h4>Professional Database</h4>
-                        <ul>
-                            <li>8 Buffalo breeds with color profiles</li>
-                            <li>20 Cattle breeds with characteristics</li>
-                            <li>Advanced pattern matching</li>
-                            <li>Breed-specific feature analysis</li>
+                    <div class="bg-gradient-to-r from-accent-50 to-accent-100 rounded-2xl p-6 border border-accent-200 hover:shadow-lg transition-all duration-300">
+                        <div class="text-center mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-r from-accent-500 to-accent-600 rounded-xl flex items-center justify-center mx-auto mb-3 shadow-md">
+                                <i class="fas fa-database text-white text-lg"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-900 mb-3">Professional Database</h4>
+                        </div>
+                        <ul class="space-y-3">
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-accent-500 mr-3"></i>
+                                23 Buffalo breeds with color profiles
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-accent-500 mr-3"></i>
+                                33 Cattle breeds with characteristics
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-accent-500 mr-3"></i>
+                                Advanced pattern matching
+                            </li>
+                            <li class="flex items-center text-gray-700">
+                                <i class="fas fa-check-circle text-accent-500 mr-3"></i>
+                                Breed-specific feature analysis
+                            </li>
                         </ul>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <section class="technology-section">
-                <h3>Technology Stack</h3>
-                <div class="tech-grid">
-                    <div class="tech-card">
-                        <h4>Image Processing</h4>
-                        <p>Advanced canvas-based image analysis with pixel-level feature extraction and color space analysis.</p>
+            <!-- Technology Stack -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-slide-up">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-laptop-code text-2xl text-white"></i>
                     </div>
-                    <div class="tech-card">
-                        <h4>Machine Learning</h4>
-                        <p>Multi-layered classification algorithms with weighted scoring and confidence assessment.</p>
+                    <h3 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">Technology Stack</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
+                        <h4 class="text-xl font-bold text-gray-900 mb-3 flex items-center">
+                            <i class="fas fa-image text-blue-600 mr-3"></i>Image Processing
+                        </h4>
+                        <p class="text-gray-700">Advanced canvas-based image analysis with pixel-level feature extraction and color space analysis.</p>
                     </div>
-                    <div class="tech-card">
-                        <h4>Computer Vision</h4>
-                        <p>Sobel edge detection, texture analysis, and regional brightness distribution algorithms.</p>
+                    <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-2xl p-6 border border-green-200">
+                        <h4 class="text-xl font-bold text-gray-900 mb-3 flex items-center">
+                            <i class="fas fa-robot text-green-600 mr-3"></i>Machine Learning
+                        </h4>
+                        <p class="text-gray-700">Multi-layered classification algorithms with weighted scoring and confidence assessment.</p>
                     </div>
-                    <div class="tech-card">
-                        <h4>Pattern Recognition</h4>
-                        <p>Advanced breed identification using color histograms and morphological feature analysis.</p>
+                    <div class="bg-gradient-to-r from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
+                        <h4 class="text-xl font-bold text-gray-900 mb-3 flex items-center">
+                            <i class="fas fa-eye text-purple-600 mr-3"></i>Computer Vision
+                        </h4>
+                        <p class="text-gray-700">Sobel edge detection, texture analysis, and regional brightness distribution algorithms.</p>
+                    </div>
+                    <div class="bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-2xl p-6 border border-indigo-200">
+                        <h4 class="text-xl font-bold text-gray-900 mb-3 flex items-center">
+                            <i class="fas fa-search text-indigo-600 mr-3"></i>Pattern Recognition
+                        </h4>
+                        <p class="text-gray-700">Advanced breed identification using color histograms and morphological feature analysis.</p>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <section class="accuracy-section">
-                <h3>Accuracy & Performance</h3>
-                <div class="accuracy-grid">
-                    <div class="accuracy-card">
-                        <div class="accuracy-number">95%</div>
-                        <div class="accuracy-label">Overall Accuracy</div>
-                        <p>High precision classification across all supported breeds</p>
+            <!-- Performance Stats -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-slide-up">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-chart-line text-2xl text-white"></i>
                     </div>
-                    <div class="accuracy-card">
-                        <div class="accuracy-number">2.5s</div>
-                        <div class="accuracy-label">Processing Time</div>
-                        <p>Fast analysis without compromising on accuracy</p>
+                    <h3 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-4">Accuracy & Performance</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="text-center bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-200">
+                        <div class="text-4xl font-black text-green-600 mb-2">95%</div>
+                        <div class="text-lg font-bold text-gray-900 mb-2">Overall Accuracy</div>
+                        <p class="text-sm text-gray-600">High precision classification across all supported breeds</p>
                     </div>
-                    <div class="accuracy-card">
-                        <div class="accuracy-number">28</div>
-                        <div class="accuracy-label">Supported Breeds</div>
-                        <p>Comprehensive database covering major cattle and buffalo breeds</p>
+                    <div class="text-center bg-gradient-to-r from-blue-50 to-sky-50 rounded-2xl p-6 border border-blue-200">
+                        <div class="text-4xl font-black text-blue-600 mb-2">2.5s</div>
+                        <div class="text-lg font-bold text-gray-900 mb-2">Processing Time</div>
+                        <p class="text-sm text-gray-600">Fast analysis without compromising on accuracy</p>
                     </div>
-                    <div class="accuracy-card">
-                        <div class="accuracy-number">99%</div>
-                        <div class="accuracy-label">Uptime</div>
-                        <p>Reliable service with minimal downtime</p>
+                    <div class="text-center bg-gradient-to-r from-purple-50 to-violet-50 rounded-2xl p-6 border border-purple-200">
+                        <div class="text-4xl font-black text-purple-600 mb-2">56</div>
+                        <div class="text-lg font-bold text-gray-900 mb-2">Supported Breeds</div>
+                        <p class="text-sm text-gray-600">Comprehensive database covering major cattle and buffalo breeds</p>
+                    </div>
+                    <div class="text-center bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl p-6 border border-indigo-200">
+                        <div class="text-4xl font-black text-indigo-600 mb-2">99%</div>
+                        <div class="text-lg font-bold text-gray-900 mb-2">Uptime</div>
+                        <p class="text-sm text-gray-600">Reliable service with minimal downtime</p>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <section class="features-section">
-                <h3>Key Features</h3>
-                <div class="features-list">
-                    <div class="feature-item">
-                        <div class="feature-icon">🔍</div>
-                        <div class="feature-content">
-                            <h4>Advanced Image Analysis</h4>
-                            <p>Multi-dimensional feature extraction including color histograms, texture analysis, and edge detection</p>
+            <!-- Key Features -->
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 animate-slide-up">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <i class="fas fa-star text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">Key Features</h3>
+                </div>
+                <div class="space-y-6">
+                    <div class="flex items-start space-x-4 p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border">
+                        <div class="text-4xl">🔍</div>
+                        <div>
+                            <h4 class="text-xl font-bold text-gray-900 mb-2">Advanced Image Analysis</h4>
+                            <p class="text-gray-700">Multi-dimensional feature extraction including color histograms, texture analysis, and edge detection</p>
                         </div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">🎯</div>
-                        <div class="feature-content">
-                            <h4>High Accuracy Classification</h4>
-                            <p>Industry-leading accuracy rates with confidence scoring and validation</p>
+                    <div class="flex items-start space-x-4 p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border">
+                        <div class="text-4xl">🎯</div>
+                        <div>
+                            <h4 class="text-xl font-bold text-gray-900 mb-2">High Accuracy Classification</h4>
+                            <p class="text-gray-700">Industry-leading accuracy rates with confidence scoring and validation</p>
                         </div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">⚡</div>
-                        <div class="feature-content">
-                            <h4>Real-time Processing</h4>
-                            <p>Fast analysis with results delivered in seconds, not minutes</p>
+                    <div class="flex items-start space-x-4 p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border">
+                        <div class="text-4xl">⚡</div>
+                        <div>
+                            <h4 class="text-xl font-bold text-gray-900 mb-2">Real-time Processing</h4>
+                            <p class="text-gray-700">Fast analysis with results delivered in seconds, not minutes</p>
                         </div>
                     </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">📊</div>
-                        <div class="feature-content">
-                            <h4>Detailed Reports</h4>
-                            <p>Comprehensive analysis with breed identification, confidence scores, and technical details</p>
+                    <div class="flex items-start space-x-4 p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl border">
+                        <div class="text-4xl">📊</div>
+                        <div>
+                            <h4 class="text-xl font-bold text-gray-900 mb-2">Detailed Reports</h4>
+                            <p class="text-gray-700">Comprehensive analysis with breed identification, confidence scores, and technical details</p>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </main>
-
-        <footer>
-            <p>🔬 Professional AI Analysis • High Accuracy Classification • Industry-Grade Technology</p>
-        </footer>
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 relative overflow-hidden mt-16">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary-900/50 to-secondary-900/50"></div>
+        <div class="relative z-10 max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-gray-400 text-sm">
+                    <i class="fas fa-microscope mr-2"></i>
+                    Professional AI Analysis • High Accuracy Classification • Industry-Grade Technology
+                </p>
+                <p class="text-xs text-gray-500 mt-2">
+                    &copy; 2025 ATC - Animal Type Classification. All rights reserved.
+                </p>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500"></div>
+    </footer>
 
     <script src="breed-database.js"></script>
     <script src="script.js"></script>

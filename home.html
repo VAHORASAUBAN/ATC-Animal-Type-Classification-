@@ -3,93 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fast Cattle vs Buffalo Classifier - Home</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Pashu Parakh - Animal Type Classification</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            100: '#e0e9ff',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81'
+                        },
+                        secondary: {
+                            50: '#fef7ff',
+                            100: '#fce7ff',
+                            400: '#d946ef',
+                            500: '#c026d3',
+                            600: '#a21caf',
+                            700: '#86198f',
+                            800: '#701a75',
+                            900: '#581c87'
+                        },
+                        accent: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'pulse-slow': 'pulse 4s infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="brand">Fast Classifier</div>
-            <ul class="nav-links">
-                <li><a href="home.html" class="active">Home</a></li>
-                <li><a href="upload.html">Upload</a></li>
-                <li><a href="info.html">Info</a></li>
-                <li><a href="breeds.html">Breeds</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-            </ul>
+<body class="bg-gradient-to-br from-primary-50 via-white to-secondary-50 min-h-screen animate-fade-in">
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-lg border-b border-primary-200 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-paw text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-700 to-secondary-700 bg-clip-text text-transparent">Pashu Parakh</h1>
+                                <p class="text-xs text-gray-600">Animal Type Classification</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-2">
+                        <a href="home.html" class="bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg transform hover:scale-105 transition-all duration-300">Home</a>
+                        <a href="upload.html" class="text-gray-700 hover:bg-gradient-to-r hover:from-primary-600 hover:to-secondary-600 hover:text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">Upload</a>
+                        <a href="info.html" class="text-gray-700 hover:bg-gradient-to-r hover:from-primary-600 hover:to-secondary-600 hover:text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">Info</a>
+                        <a href="breeds.html" class="text-gray-700 hover:bg-gradient-to-r hover:from-primary-600 hover:to-secondary-600 hover:text-white px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">Breeds</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
-    <div class="container">
-        <header>
-            <a id="home"></a>
-            <h1>Professional Cattle & Buffalo Classifier</h1>
-            <p>Advanced AI Analysis • High Accuracy • Industry-Grade Results</p>
-        </header>
 
-        <main>
-            <div class="welcome-section">
-                <div class="welcome-card">
-                    <h2>Welcome to Fast Classifier</h2>
-                    <p>Our cutting-edge AI system uses advanced computer vision techniques to accurately classify cattle and buffalo breeds with industry-grade precision.</p>
-                    
-                    <div class="features-grid">
-                        <div class="feature-card">
-                            <div class="feature-icon">🔬</div>
-                            <h3>Advanced AI</h3>
-                            <p>State-of-the-art computer vision algorithms for precise classification</p>
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden bg-gradient-to-r from-primary-600 via-secondary-600 to-primary-800">
+        <div class="absolute inset-0 bg-black opacity-10"></div>
+        <div class="relative z-10 max-w-7xl mx-auto">
+            <div class="pb-8 sm:pb-16 md:pb-20 lg:pb-28 xl:pb-32">
+                <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+                    <div class="text-center animate-slide-up">
+                        <h1 class="text-5xl tracking-tight font-black text-white sm:text-6xl md:text-7xl lg:text-8xl">
+                            <span class="block mb-4">AI-Powered</span>
+                            <span class="block bg-gradient-to-r from-accent-400 to-yellow-400 bg-clip-text text-transparent animate-pulse-slow">Animal Classification</span>
+                        </h1>
+                        <p class="mt-6 text-lg text-gray-100 sm:mt-8 sm:text-xl md:text-2xl max-w-3xl mx-auto">
+                            🐄 Advanced computer vision technology for accurate cattle and buffalo breed identification. Get instant results with industry-leading precision. 🔬
+                        </p>
+                        <div class="mt-8 sm:mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
+                            <a href="upload.html" class="group bg-gradient-to-r from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white px-10 py-4 rounded-full text-lg font-bold shadow-2xl transform hover:scale-110 transition-all duration-300 flex items-center space-x-2">
+                                <i class="fas fa-upload group-hover:animate-bounce"></i>
+                                <span>Start Analysis</span>
+                                <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                            <a href="info.html" class="group bg-white/20 backdrop-blur-md hover:bg-white/30 text-white border-2 border-white/30 px-10 py-4 rounded-full text-lg font-bold shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center space-x-2">
+                                <i class="fas fa-info-circle group-hover:rotate-12 transition-transform"></i>
+                                <span>Learn More</span>
+                            </a>
                         </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">⚡</div>
-                            <h3>Fast Analysis</h3>
-                            <p>Get instant results with our optimized processing engine</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">🎯</div>
-                            <h3>High Accuracy</h3>
-                            <p>Industry-leading accuracy rates for reliable results</p>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">📊</div>
-                            <h3>Detailed Reports</h3>
-                            <p>Comprehensive analysis with breed identification and confidence scores</p>
+                        
+                        <!-- Animal Icons -->
+                        <div class="mt-12 flex justify-center items-center space-x-8">
+                            <div class="text-center group">
+                               
+                                <p class="text-white/90 text-lg font-bold">🐄 Cattle</p>
+                                <p class="text-white/70 text-sm">Domestic cattle breeds</p>
+                            </div>
+                            <div class="text-3xl text-accent-300 font-black text-white flex items-center mx-6">
+                                AND
+                            </div>
+                            <div class="text-center group">
+                               
+                                <p class="text-white/90 text-lg font-bold">🐃 Buffalo</p>
+                                <p class="text-white/70 text-sm">Water buffalo breeds</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </main>
             </div>
-
-            <div class="cta-section">
-                <h2>Ready to Get Started?</h2>
-                <p>Upload an image of cattle or buffalo to begin your analysis</p>
-                <a href="upload.html" class="cta-button">Start Analysis</a>
-            </div>
-
-            <div class="stats-section">
-                <h2>Our Performance</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number">95%</div>
-                        <div class="stat-label">Accuracy Rate</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">28</div>
-                        <div class="stat-label">Breeds Supported</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">2.5s</div>
-                        <div class="stat-label">Average Processing Time</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">1000+</div>
-                        <div class="stat-label">Images Analyzed</div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <footer>
-            <p>🔬 Professional AI Analysis • High Accuracy Classification • Industry-Grade Technology</p>
-        </footer>
+        </div>
+        
+        <!-- Decorative Elements -->
+        <div class="absolute top-20 left-10 w-20 h-20 bg-accent-400/20 rounded-full animate-pulse-slow"></div>
+        <div class="absolute bottom-20 right-10 w-16 h-16 bg-yellow-400/20 rounded-full animate-bounce-slow"></div>
+        <div class="absolute top-1/2 left-20 w-12 h-12 bg-white/10 rounded-full animate-ping"></div>
     </div>
+
+    <!-- Features Section -->
+    <div class="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center animate-slide-up">
+                <h2 class="text-lg text-primary-600 font-bold tracking-wide uppercase mb-4">✨ Amazing Features</h2>
+                <p class="text-4xl leading-10 font-black tracking-tight bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent sm:text-5xl">
+                    Advanced AI Classification
+                </p>
+                <p class="mt-6 max-w-3xl text-xl text-gray-600 mx-auto">
+                    Our cutting-edge technology provides accurate, fast, and reliable animal breed identification with stunning visual results.
+                </p>
+            </div>
+
+            <div class="mt-16">
+                <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2">
+                    <div class="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+                        <div class="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-brain text-2xl text-white group-hover:animate-pulse"></i>
+                        </div>
+                        <h3 class="ml-8 text-2xl font-bold text-gray-900 mb-4">🧠 Advanced AI</h3>
+                        <p class="ml-8 text-gray-600 leading-relaxed">
+                            State-of-the-art computer vision algorithms powered by deep learning for precise classification with neural network intelligence.
+                        </p>
+                        <div class="ml-8 mt-4 text-primary-600 font-semibold">Accuracy: 95%+</div>
+                    </div>
+
+                    <div class="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+                        <div class="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-r from-accent-500 to-accent-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-bolt text-2xl text-white group-hover:animate-bounce"></i>
+                        </div>
+                        <h3 class="ml-8 text-2xl font-bold text-gray-900 mb-4">⚡ Lightning Fast</h3>
+                        <p class="ml-8 text-gray-600 leading-relaxed">
+                            Get instant results with our optimized processing engine in under 3 seconds. Real-time analysis at your fingertips.
+                        </p>
+                        <div class="ml-8 mt-4 text-accent-600 font-semibold">Speed: &lt; 3 seconds</div>
+                    </div>
+
+                    <div class="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+                        <div class="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-r from-secondary-500 to-secondary-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-target text-2xl text-white group-hover:animate-spin"></i>
+                        </div>
+                        <h3 class="ml-8 text-2xl font-bold text-gray-900 mb-4">🎯 High Accuracy</h3>
+                        <p class="ml-8 text-gray-600 leading-relaxed">
+                            Industry-leading accuracy rates with 95%+ precision for reliable results you can trust in professional environments.
+                        </p>
+                        <div class="ml-8 mt-4 text-secondary-600 font-semibold">Precision: Industry-leading</div>
+                    </div>
+
+                    <div class="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
+                        <div class="absolute -top-4 -left-4 w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <i class="fas fa-chart-line text-2xl text-white group-hover:animate-pulse"></i>
+                        </div>
+                        <h3 class="ml-8 text-2xl font-bold text-gray-900 mb-4">📊 Detailed Reports</h3>
+                        <p class="ml-8 text-gray-600 leading-relaxed">
+                            Comprehensive analysis with breed identification, confidence scores, and detailed insights with beautiful visualizations.
+                        </p>
+                        <div class="ml-8 mt-4 text-orange-600 font-semibold">Features: Full Analysis</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="relative bg-gradient-to-r from-primary-600 via-secondary-600 to-primary-800 overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-20"></div>
+        <!-- Animated Background Elements -->
+        <div class="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full animate-pulse-slow"></div>
+        <div class="absolute bottom-10 right-10 w-24 h-24 bg-accent-400/20 rounded-full animate-bounce-slow"></div>
+        <div class="absolute top-1/2 left-1/3 w-16 h-16 bg-yellow-400/10 rounded-full animate-ping"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto py-16 px-4 sm:py-20 sm:px-6 lg:px-8 lg:py-24">
+            <div class="max-w-4xl mx-auto text-center animate-slide-up">
+                <h2 class="text-4xl font-black text-white sm:text-5xl mb-4">
+                    🌟 Trusted by professionals worldwide
+                </h2>
+                <p class="text-xl text-gray-200 sm:text-2xl">
+                    Our AI system delivers consistent, reliable results across diverse scenarios with amazing accuracy.
+                </p>
+            </div>
+            <div class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">
+                <div class="group text-center bg-white/10 backdrop-blur-md rounded-2xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+                    <div class="text-6xl font-black text-accent-400 mb-2 group-hover:animate-pulse">95%</div>
+                    <div class="text-lg font-bold text-white mb-2">🎯 Accuracy Rate</div>
+                    <div class="text-gray-300 text-sm">Industry-leading precision</div>
+                </div>
+                <div class="group text-center bg-white/10 backdrop-blur-md rounded-2xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+                    <div class="text-6xl font-black text-yellow-400 mb-2 group-hover:animate-bounce">28+</div>
+                    <div class="text-lg font-bold text-white mb-2">🐄 Breeds Supported</div>
+                    <div class="text-gray-300 text-sm">Comprehensive coverage</div>
+                </div>
+                <div class="group text-center bg-white/10 backdrop-blur-md rounded-2xl p-8 hover:bg-white/20 transition-all duration-300 transform hover:scale-105">
+                    <div class="text-6xl font-black text-white mb-2 group-hover:animate-pulse">15K+</div>
+                    <div class="text-lg font-bold text-white mb-2">📸 Images Processed</div>
+                    <div class="text-gray-300 text-sm">Real-world tested</div>
+                </div>
+            </div>
+            
+            <!-- Additional Mini Stats -->
+            <div class="mt-12 flex justify-center space-x-8 text-center">
+                <div class="text-white">
+                    <div class="text-2xl font-bold">⚡ 2.5s</div>
+                    <div class="text-sm opacity-80">Avg Processing</div>
+                </div>
+                <div class="text-white">
+                    <div class="text-2xl font-bold">🔬 AI</div>
+                    <div class="text-sm opacity-80">Deep Learning</div>
+                </div>
+                <div class="text-white">
+                    <div class="text-2xl font-bold">🌍 24/7</div>
+                    <div class="text-sm opacity-80">Available</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="bg-gradient-to-r from-gray-50 to-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-3xl shadow-2xl overflow-hidden">
+                <div class="px-8 py-16 sm:px-16 lg:flex lg:items-center lg:justify-between">
+                    <div class="text-center lg:text-left animate-slide-up">
+                        <h2 class="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+                            <span class="block mb-2">🚀 Ready to get started?</span>
+                            <span class="block text-accent-300">Upload your first image today!</span>
+                        </h2>
+                        <p class="mt-4 text-xl text-gray-200">
+                            Join thousands of professionals using our AI classification system
+                        </p>
+                    </div>
+                    <div class="mt-8 lg:mt-0 lg:flex-shrink-0 flex flex-col sm:flex-row gap-4 lg:flex-col">
+                        <a href="upload.html" class="group bg-accent-500 hover:bg-accent-600 text-white px-8 py-4 rounded-full text-lg font-bold shadow-xl transform hover:scale-110 transition-all duration-300 flex items-center justify-center space-x-3">
+                            <i class="fas fa-cloud-upload-alt group-hover:animate-bounce text-2xl"></i>
+                            <span>Start Analysis Now</span>
+                            <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                        </a>
+                        <a href="breeds.html" class="group bg-white/20 backdrop-blur-md hover:bg-white/30 text-white border-2 border-white/30 px-8 py-4 rounded-full text-lg font-bold shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-3">
+                            <i class="fas fa-search group-hover:rotate-12 transition-transform"></i>
+                            <span>Explore Breeds</span>
+                        </a>
+                        <div class="text-center lg:text-left">
+                            <p class="text-white/80 text-sm mt-2">
+                                ✨ Free to try • No signup required • Instant results
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary-900/50 to-secondary-900/50"></div>
+        <div class="relative z-10 max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex justify-center items-center space-x-4 mb-8">
+                    <div class="w-12 h-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-paw text-white text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="text-2xl font-bold bg-gradient-to-r from-primary-400 to-secondary-400 bg-clip-text text-transparent">Pashu Parakh</h3>
+                        <p class="text-gray-400 text-sm">Animal Type Classification</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                    <div class="text-center">
+                        <h4 class="text-white font-bold mb-3 flex items-center justify-center space-x-2">
+                            <i class="fas fa-microscope text-accent-400"></i>
+                            <span>Professional AI Analysis</span>
+                        </h4>
+                        <p class="text-gray-400 text-sm">Industry-grade technology for accurate results</p>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="text-white font-bold mb-3 flex items-center justify-center space-x-2">
+                            <i class="fas fa-target text-accent-400"></i>
+                            <span>High Accuracy Classification</span>
+                        </h4>
+                        <p class="text-gray-400 text-sm">95%+ precision you can trust</p>
+                    </div>
+                    <div class="text-center">
+                        <h4 class="text-white font-bold mb-3 flex items-center justify-center space-x-2">
+                            <i class="fas fa-cogs text-accent-400"></i>
+                            <span>Advanced Technology</span>
+                        </h4>
+                        <p class="text-gray-400 text-sm">Cutting-edge computer vision algorithms</p>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-700 pt-8">
+                    <p class="text-gray-400 text-sm mb-4">
+                        &copy; 2025 Pashu Parakh - Animal Type Classification. All rights reserved.
+                    </p>
+                    <p class="text-xs text-gray-500">
+                        Made with ❤️ for animal classification • Powered by AI • Built for professionals
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Decorative Elements -->
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500"></div>
+    </footer>
 
     <script src="breed-database.js"></script>
     <script src="local_ml_classifier.js"></script>
