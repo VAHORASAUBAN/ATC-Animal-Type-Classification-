@@ -1,0 +1,153 @@
+# =========================
+# OS & System Files
+# =========================
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+Icon?
+*.swp
+*.swo
+*.bak
+*.tmp
+*.temp
+~$*
+
+# =========================
+# Environment & Secrets
+# =========================
+.env
+.env.local
+.env.*.local
+*.secret
+*.key
+*.pem
+*.crt
+*.cert
+
+# =========================
+# Dependency Directories
+# =========================
+node_modules/
+bower_components/
+vendor/
+.venv/
+venv/
+env/
+__pycache__/
+
+# =========================
+# Build & Output
+# =========================
+dist/
+build/
+out/
+target/
+bin/
+obj/
+*.o
+*.a
+*.so
+*.dll
+*.exe
+*.class
+*.jar
+*.war
+*.ear
+*.log
+
+# =========================
+# IDE & Editor Configs
+# =========================
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+
+# =========================
+# Test & Coverage
+# =========================
+coverage/
+*.lcov
+.nyc_output/
+.pytest_cache/
+.jest/
+.mochawesome-report/
+
+# =========================
+# Temporary / Generated Files
+# =========================
+tmp/
+temp/
+.cache/
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# =========================
+# Package Managers
+# =========================
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+poetry.lock
+Pipfile.lock
+
+# =========================
+# Miscellaneous
+# =========================
+*.sqlite3
+*.db
+*.iml
+*.zip
+*.tar
+*.gz
+*.rar
+
+# =========================
+# Specific Frameworks
+# =========================
+
+# --- React / Next.js ---
+.next/
+.vercel/
+
+# --- Django / Flask ---
+*.pyc
+db.sqlite3
+migrations/__pycache__/
+instance/
+
+# --- Laravel / PHP ---
+bootstrap/cache/
+storage/
+.env.example
+
+# --- Java / Gradle ---
+.gradle/
+.classpath
+.project
+.settings/
+target/
+
+# --- Android / Kotlin ---
+.gradle/
+local.properties
+*.apk
+*.aab
+*.iml
+captures/
+output.json
+
+# --- iOS / Swift ---
+DerivedData/
+*.xcworkspace
+*.xcuserstate
+*.xcuserdata/
+Pods/
+
+# =========================
+# End of File
+# =========================
