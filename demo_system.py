@@ -13,7 +13,7 @@ def check_system():
     """Check if all system components are present"""
     print("🔍 Checking system components...")
     
-    # Check HTML files
+    # Check essential HTML files
     html_files = ['home.html', 'upload.html', 'breeds.html', 'info.html']
     for file in html_files:
         if Path(file).exists():
@@ -21,25 +21,27 @@ def check_system():
         else:
             print(f"❌ {file} - Missing")
     
-    # Check JavaScript files
-    js_files = ['script.js', 'breed-database.js', 'ml_classifier.js']
+    # Check essential JavaScript files
+    js_files = ['script.js', 'breed-database.js', 'local_ml_classifier.js']
     for file in js_files:
         if Path(file).exists():
             print(f"✅ {file} - Found")
         else:
             print(f"❌ {file} - Missing")
     
-    # Check dataset
-    if Path("cow-and-buffalo.v1i.tensorflow").exists():
-        print("✅ Dataset - Found")
-    else:
-        print("❌ Dataset - Missing")
-    
     # Check CSS
     if Path("style.css").exists():
         print("✅ style.css - Found")
     else:
         print("❌ style.css - Missing")
+    
+    # Check test files
+    test_files = ['test_web_system.html', 'test_local_classifier.html']
+    for file in test_files:
+        if Path(file).exists():
+            print(f"✅ {file} - Found")
+        else:
+            print(f"❌ {file} - Missing")
 
 def start_web_server():
     """Start the web server"""
@@ -67,7 +69,7 @@ def open_demo_pages():
         ("Home Page", "http://localhost:8000/home.html"),
         ("Upload Page", "http://localhost:8000/upload.html"),
         ("Breeds Page", "http://localhost:8000/breeds.html"),
-        ("Test Page", "http://localhost:8000/test_web_system.html")
+        ("Test Page", "http://localhost:8000/test_local_classifier.html")
     ]
     
     for name, url in pages:
